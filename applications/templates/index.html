@@ -4,7 +4,7 @@
         <title>WannaTrek</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="../static/css/style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(111,189,111,0.92);">
@@ -32,8 +32,8 @@
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <button type="button" class="btn btn-login me-2">Login</button>
-                    <button type="button" class="btn btn-register">Register</button>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-login me-2">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-register">Register</a>
                 </form>
                 </div>
             </div>
