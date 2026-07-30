@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from applications.database import db
 from applications.models import User, Trek, Booking
 from applications.routes.auth import auth
+from applications.routes.dashboard import dashboard
 
 app = Flask(
     __name__,
@@ -16,6 +17,7 @@ app.config["SECRET_KEY"] = "wannatrek123"
 
 db.init_app(app)
 app.register_blueprint(auth)
+app.register_blueprint(dashboard)
 
 with app.app_context():
     db.create_all()
