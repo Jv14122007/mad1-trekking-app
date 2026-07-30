@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-
+from werkzeug.security import generate_password_hash
 from applications.database import db
 from applications.models import User, Trek, Booking
 from applications.routes.auth import auth
@@ -21,6 +21,21 @@ app.register_blueprint(dashboard)
 
 with app.app_context():
     db.create_all()
+
+    admin = User.query.filter_by(email="admin@wannatrek.com").first()
+
+    if admin is None:
+        admin = User(
+            username="Admin",
+            email="admin@wannatrek.com",
+            password=generate_password_hash("admin123"),
+            role="admin",
+            approved=True,
+            active=True
+        )
+
+        db.session.add(admin)
+        db.session.commit()
 
 @app.route("/")
 def home():
