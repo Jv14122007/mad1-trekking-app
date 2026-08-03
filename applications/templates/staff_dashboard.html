@@ -2,12 +2,61 @@
 <html>
 <head>
     <title>Staff Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-<h1>Welcome Trek Staff</h1>
+<div class="container mt-5">
 
-<p>This is the Staff Dashboard.</p>
+    <h2>My Assigned Treks</h2>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-success">
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Difficulty</th>
+                <th>Slots Left</th>
+                <th>Participants</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for trek in treks %}
+
+        <tr>
+
+            <td>{{ trek.name }}</td>
+            <td>{{ trek.location }}</td>
+            <td>{{ trek.date }}</td>
+            <td>{{ trek.difficulty }}</td>
+            <td>{{ trek.slots }}</td>
+
+            <td>
+
+                <a href="{{ url_for('dashboard.view_participants', trek_id=trek.id) }}"
+                   class="btn btn-primary btn-sm">
+
+                    View Participants
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
 
 </body>
 </html>

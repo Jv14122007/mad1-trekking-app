@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Bookings</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h2>My Bookings</h2>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-success">
+
+            <tr>
+                <th>Trek Name</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for booking in bookings %}
+
+            <tr>
+
+                <td>{{ booking.trek.name }}</td>
+                <td>{{ booking.trek.location }}</td>
+                <td>{{ booking.trek.date }}</td>
+                <td>{{ booking.status }}</td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

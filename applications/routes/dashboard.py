@@ -166,18 +166,6 @@ def approve_staff(user_id):
 
     return redirect(url_for("dashboard.admin_dashboard"))
 
-@dashboard.route("/staff")
-def staff_dashboard():
-
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
-
-    if session["role"] != "staff":
-        return "Access Denied"
-
-    return render_template("staff_dashboard.html")
-
-
 @dashboard.route("/user")
 def user_dashboard():
 
@@ -188,3 +176,103 @@ def user_dashboard():
         return "Access Denied"
 
     return render_template("user_dashboard.html")
+
+@dashboard.route("/user/treks")
+def user_treks():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "user":
+        return "Access Denied"
+
+    treks = Trek.query.filter_by(status="Open").all()
+
+    return render_template(
+        "user_treks.html",
+        treks=treks
+    )
+
+@dashboard.route("/user/book/<int:trek_id>")
+def book_trek(trek_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "user":
+        return "Access Denied"
+
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.slots <= 0:
+        return "No slots available"
+
+    booking = Booking(
+        user_id=session["user_id"],
+        trek_id=trek.id,
+        booking_date=datetime.today().date()
+    )
+
+    trek.slots -= 1
+
+    db.session.add(booking)
+    db.session.commit()
+
+    return redirect(url_for("dashboard.user_treks"))
+@dashboard.route("/user/bookings")
+def my_bookings():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "user":
+        return "Access Denied"
+
+    bookings = Booking.query.filter_by(
+        user_id=session["user_id"]
+    ).all()
+
+    return render_template(
+        "my_bookings.html",
+        bookings=bookings
+    )
+
+@dashboard.route("/staff")
+def staff_dashboard():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "staff":
+        return "Access Denied"
+
+    treks = Trek.query.filter_by(
+        assigned_staff_id=session["user_id"]
+    ).all()
+
+    return render_template(
+        "staff_dashboard.html",
+        treks=treks
+    )
+
+@dashboard.route("/staff/participants/<int:trek_id>")
+def view_participants(trek_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "staff":
+        return "Access Denied"
+
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.assigned_staff_id != session["user_id"]:
+        return "Access Denied"
+
+    bookings = Booking.query.filter_by(trek_id=trek.id).all()
+
+    return render_template(
+        "participants.html",
+        trek=trek,
+        bookings=bookings
+    )

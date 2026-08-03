@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Available Treks</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h2>Available Treks</h2>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-success">
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Difficulty</th>
+                <th>Date</th>
+                <th>Slots</th>
+                <th>Assigned Staff</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for trek in treks %}
+
+            <tr>
+
+                <td>{{ trek.name }}</td>
+                <td>{{ trek.location }}</td>
+                <td>{{ trek.difficulty }}</td>
+                <td>{{ trek.date }}</td>
+                <td>{{ trek.slots }}</td>
+
+                <td>
+                    {% if trek.assigned_staff %}
+                        {{ trek.assigned_staff.username }}
+                    {% else %}
+                        Not Assigned
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{{ url_for('dashboard.book_trek', trek_id=trek.id) }}"
+                        class="btn btn-success btn-sm">
+                        Book Trek
+                    </a>
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>
