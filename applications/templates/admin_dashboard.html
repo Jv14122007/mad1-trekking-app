@@ -56,6 +56,52 @@
         </div>
 
     </div>
+    <hr class="my-5">
+
+        <h3>Pending Trek Staff Approvals</h3>
+
+        {% if pending_staff %}
+
+        <table class="table table-bordered table-striped mt-3">
+
+            <thead class="table-success">
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for staff in pending_staff %}
+
+                <tr>
+
+                    <td>{{ staff.username }}</td>
+
+                    <td>{{ staff.email }}</td>
+
+                    <td>
+                        <a href="{{ url_for('dashboard.approve_staff', user_id=staff.id) }}"
+                        class="btn btn-success btn-sm">
+                            Approve
+                        </a>
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <p>No pending staff requests.</p>
+
+        {% endif %}
 
 </div>
 

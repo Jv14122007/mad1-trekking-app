@@ -26,18 +26,18 @@ body{
 }
 .hero {
     min-height: calc(100vh - 56px);
-    background-image: linear-gradient(
-        rgba(0,0,0,0.4),
-        rgba(0,0,0,0.4)
-    ), url("../images/Hill.jpeg");
+
+    background-image:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("../images/Hill.jpeg");
 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 
     color: white;
     text-align: center;

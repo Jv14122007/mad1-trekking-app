@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Treks</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="container mt-5">
+
+    <h2>Manage Treks</h2>
+
+    <a href="{{ url_for('dashboard.create_trek') }}" class="btn btn-success mb-3">
+        + Create New Trek
+    </a>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-success">
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Difficulty</th>
+                <th>Date</th>
+                <th>Slots</th>
+                <th>Status</th>
+                <th>Assigned Staff</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for trek in treks %}
+
+            <tr>
+
+                <td>{{ trek.name }}</td>
+                <td>{{ trek.location }}</td>
+                <td>{{ trek.difficulty }}</td>
+                <td>{{ trek.date }}</td>
+                <td>{{ trek.slots }}</td>
+                <td>{{ trek.status }}</td>
+                <td>
+                    {% if trek.assigned_staff %}
+                        {{ trek.assigned_staff.username }}
+                    {% else %}
+                        Not Assigned
+                    {% endif %}
+                </td>
+
+                <td>
+
+                    <a href="{{ url_for('dashboard.edit_trek', trek_id=trek.id) }}"
+                        class="btn btn-warning btn-sm">
+                         Edit
+                    </a>
+
+                    <a href="{{ url_for('dashboard.delete_trek', trek_id=trek.id) }}"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this trek?')">
+                        Delete
+                    </a>
+
+                    <a href="{{ url_for('dashboard.assign_staff', trek_id=trek.id) }}"
+                        class="btn btn-primary btn-sm">
+                         Assign Staff
+                    </a>
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

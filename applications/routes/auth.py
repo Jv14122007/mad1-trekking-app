@@ -48,6 +48,10 @@ def login():
 
         if user and check_password_hash(user.password, password):
 
+            if user.role == "staff" and not user.approved:
+                flash("Your account is waiting for admin approval.")
+                return redirect(url_for("auth.login"))
+
             session["user_id"] = user.id
             session["role"] = user.role
 
