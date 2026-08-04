@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, redirect, url_for, request
+from flask import Blueprint, render_template, session, redirect, url_for, request,flash
 from applications.models import User, Trek, Booking
 from datetime import datetime
 from applications.database import db
@@ -166,6 +166,22 @@ def approve_staff(user_id):
 
     return redirect(url_for("dashboard.admin_dashboard"))
 
+@dashboard.route("/admin/bookings")
+def manage_bookings():
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "admin":
+        return "Access Denied"
+
+    bookings = Booking.query.all()
+
+    return render_template(
+        "manage_bookings.html",
+        bookings=bookings
+    )
+
 @dashboard.route("/user")
 def user_dashboard():
 
@@ -203,9 +219,22 @@ def book_trek(trek_id):
         return "Access Denied"
 
     trek = Trek.query.get_or_404(trek_id)
+    existing_booking = Booking.query.filter_by(
+        user_id=session["user_id"],
+        trek_id=trek.id
+    ).first()
+
+    if existing_booking:
+        flash("You have already booked this trek.")
+        return redirect(url_for("dashboard.user_treks"))
+
+    if trek.status != "Open":
+        flash("Bookings are closed for this trek.")
+        return redirect(url_for("dashboard.user_treks"))
 
     if trek.slots <= 0:
-        return "No slots available"
+        flash("No slots available.")
+    return redirect(url_for("dashboard.user_treks"))
 
     booking = Booking(
         user_id=session["user_id"],
@@ -236,6 +265,28 @@ def my_bookings():
         "my_bookings.html",
         bookings=bookings
     )
+@dashboard.route("/user/cancel_booking/<int:booking_id>")
+def cancel_booking(booking_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "user":
+        return "Access Denied"
+
+    booking = Booking.query.get_or_404(booking_id)
+
+    if booking.user_id != session["user_id"]:
+        return "Access Denied"
+
+    booking.trek.slots += 1
+
+    db.session.delete(booking)
+    db.session.commit()
+
+    flash("Booking cancelled successfully.")
+
+    return redirect(url_for("dashboard.my_bookings"))
 
 @dashboard.route("/staff")
 def staff_dashboard():
@@ -276,3 +327,22 @@ def view_participants(trek_id):
         trek=trek,
         bookings=bookings
     )
+@dashboard.route("/admin/toggle_trek/<int:trek_id>")
+def toggle_trek(trek_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
+    if session["role"] != "admin":
+        return "Access Denied"
+
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.status == "Open":
+        trek.status = "Closed"
+    else:
+        trek.status = "Open"
+
+    db.session.commit()
+
+    return redirect(url_for("dashboard.manage_treks"))

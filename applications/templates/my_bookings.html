@@ -1,50 +1,115 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Bookings</title>
+{% extends "base.html" %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block title %}
+My Bookings
+{% endblock %}
 
-<body>
+{% block content %}
 
 <div class="container mt-5">
 
-    <h2>My Bookings</h2>
+    <h2 class="fw-bold text-success mb-4">
+        My Bookings
+    </h2>
 
-    <table class="table table-bordered table-hover">
+    {% if bookings %}
 
-        <thead class="table-success">
+    <div class="table-responsive">
 
-            <tr>
-                <th>Trek Name</th>
-                <th>Location</th>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
+        <table class="table table-bordered table-hover align-middle">
 
-        </thead>
+            <thead class="table-success">
 
-        <tbody>
+                <tr>
 
-        {% for booking in bookings %}
+                    <th>Trek Name</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
 
-            <tr>
+                </tr>
 
-                <td>{{ booking.trek.name }}</td>
-                <td>{{ booking.trek.location }}</td>
-                <td>{{ booking.trek.date }}</td>
-                <td>{{ booking.status }}</td>
+            </thead>
 
-            </tr>
+            <tbody>
 
-        {% endfor %}
+                {% for booking in bookings %}
 
-        </tbody>
+                <tr>
 
-    </table>
+                    <td>{{ booking.trek.name }}</td>
+
+                    <td>{{ booking.trek.location }}</td>
+
+                    <td>{{ booking.trek.date }}</td>
+
+                    <td>
+
+                        {% if booking.status == "Confirmed" %}
+
+                            <span class="badge bg-success">
+                                Confirmed
+                            </span>
+
+                        {% elif booking.status == "Cancelled" %}
+
+                            <span class="badge bg-danger">
+                                Cancelled
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-warning text-dark">
+                                {{ booking.status }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="text-center">
+
+                        {% if booking.status != "Cancelled" %}
+
+                        <a href="{{ url_for('dashboard.cancel_booking', booking_id=booking.id) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to cancel this booking?')">
+
+                            Cancel
+
+                        </a>
+
+                        {% else %}
+
+                        <span class="text-muted">
+                            —
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+
+        You haven't booked any treks yet.
+
+    </div>
+
+    {% endif %}
 
 </div>
 
-</body>
-</html>
+{% endblock %}

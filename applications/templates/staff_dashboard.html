@@ -1,62 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Staff Dashboard</title>
+{% extends "base.html" %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block title %}
+Staff Dashboard
+{% endblock %}
 
-<body>
+{% block content %}
 
 <div class="container mt-5">
 
-    <h2>My Assigned Treks</h2>
+    <h2 class="fw-bold text-success mb-4">
+        My Assigned Treks
+    </h2>
 
-    <table class="table table-bordered table-hover">
+    {% if treks %}
 
-        <thead class="table-success">
-            <tr>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Date</th>
-                <th>Difficulty</th>
-                <th>Slots Left</th>
-                <th>Participants</th>
-            </tr>
-        </thead>
+    <div class="table-responsive">
 
-        <tbody>
+        <table class="table table-bordered table-hover align-middle">
 
-        {% for trek in treks %}
+            <thead class="table-success">
 
-        <tr>
+                <tr>
 
-            <td>{{ trek.name }}</td>
-            <td>{{ trek.location }}</td>
-            <td>{{ trek.date }}</td>
-            <td>{{ trek.difficulty }}</td>
-            <td>{{ trek.slots }}</td>
+                    <th>Trek Name</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Difficulty</th>
+                    <th>Available Slots</th>
+                    <th class="text-center">Participants</th>
 
-            <td>
+                </tr>
 
-                <a href="{{ url_for('dashboard.view_participants', trek_id=trek.id) }}"
-                   class="btn btn-primary btn-sm">
+            </thead>
 
-                    View Participants
+            <tbody>
 
-                </a>
+                {% for trek in treks %}
 
-            </td>
+                <tr>
 
-        </tr>
+                    <td>{{ trek.name }}</td>
 
-        {% endfor %}
+                    <td>{{ trek.location }}</td>
 
-        </tbody>
+                    <td>{{ trek.date }}</td>
 
-    </table>
+                    <td>
+
+                        {% if trek.difficulty == "Easy" %}
+
+                            <span class="badge bg-success">
+                                Easy
+                            </span>
+
+                        {% elif trek.difficulty == "Moderate" %}
+
+                            <span class="badge bg-warning text-dark">
+                                Moderate
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+                                Difficult
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ trek.slots }}</td>
+
+                    <td class="text-center">
+
+                        <a href="{{ url_for('dashboard.view_participants', trek_id=trek.id) }}"
+                           class="btn btn-success btn-sm">
+
+                            View Participants
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+
+        No treks have been assigned to you yet.
+
+    </div>
+
+    {% endif %}
 
 </div>
 
-</body>
-</html>
+{% endblock %}

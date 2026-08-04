@@ -67,3 +67,10 @@ def login():
         flash("Invalid email or password")
 
     return render_template("login.html")
+
+@auth.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect(url_for("home"))    

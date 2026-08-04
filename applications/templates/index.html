@@ -1,52 +1,275 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>WannaTrek</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(111,189,111,0.92);">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold fs-3" href="#">WannaTrek</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
+<html lang="en">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Treks</a>
-                    </li>
+<head>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-                <form class="d-flex">
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-login me-2">Login</a>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-register">Register</a>
-                </form>
-                </div>
+    <title>WannaTrek</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<div class="container mt-3">
+
+    {% for message in messages %}
+
+    <div class="alert alert-success alert-dismissible fade show">
+
+        {{ message }}
+
+        <button class="btn-close"
+                data-bs-dismiss="alert">
+        </button>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+{% endwith %}
+
+<nav class="navbar navbar-expand-lg navbar-light"
+     style="background-color: rgba(111,189,111,0.95);">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="#">
+            WannaTrek
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
+
+            <ul class="navbar-nav me-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Treks</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+
+            </ul>
+
+            <div>
+
+                <a href="{{ url_for('auth.login') }}"
+                   class="btn btn-login me-2">
+                    Login
+                </a>
+
+                <a href="{{ url_for('auth.register') }}"
+                   class="btn btn-register">
+                    Register
+                </a>
+
             </div>
-        </nav>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Discover Your Next Adventure</h1>
-                <p>Book unforgettable trekking experiences across breathtaking destinations.</p>
-                <div class="mt-4">
-                    <button class="btn btn-register me-3">Get Started</button>
-                    <button class="btn btn-login">Explore Treks</button>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-content">
+
+<h1>
+Discover Your Next Adventure
+</h1>
+
+<p>
+
+Experience breathtaking trekking destinations,
+book your trek online,
+and explore nature like never before.
+
+</p>
+
+<div class="mt-4">
+
+<a href="{{ url_for('auth.register') }}"
+class="btn btn-register btn-lg me-3">
+
+Get Started
+
+</a>
+
+<a href="{{ url_for('auth.login') }}"
+class="btn btn-login btn-lg">
+
+Login
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FEATURES -->
+
+<!-- FEATURES -->
+
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+            Why Choose WannaTrek?
+        </h2>
+
+        <p class="text-muted">
+            Everything you need for a safe and memorable trekking experience.
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+
+            <div class="card h-100 text-center">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold text-success mb-3">
+                        Verified Treks
+                    </h4>
+
+                    <p class="text-muted">
+                        Carefully curated trekking routes to ensure safety, adventure, and unforgettable experiences.
+                    </p>
+
                 </div>
+
             </div>
-        </section>
-    </body>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card h-100 text-center">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold text-success mb-3">
+                        Experienced Staff
+                    </h4>
+
+                    <p class="text-muted">
+                        Our trained trekking staff guide every trek with professionalism and a strong focus on safety.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card h-100 text-center">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold text-success mb-3">
+                        Easy Booking
+                    </h4>
+
+                    <p class="text-muted">
+                        Reserve your preferred trek online in just a few clicks through a simple booking process.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CALL TO ACTION -->
+
+<section class="bg-success text-white py-5">
+
+<div class="container text-center">
+
+<h2>
+
+Ready for Your Next Adventure?
+
+</h2>
+
+<p class="lead">
+
+Join WannaTrek today and start exploring breathtaking destinations.
+
+</p>
+
+<a href="{{ url_for('auth.register') }}"
+class="btn btn-light btn-lg">
+
+Register Now
+
+</a>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="bg-dark text-white text-center py-3">
+
+<p class="mb-0">
+
+© 2026 WannaTrek | Trekking Management System
+
+</p>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
 </html>

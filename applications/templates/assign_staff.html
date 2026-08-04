@@ -1,49 +1,93 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Assign Staff</title>
+{% extends "base.html" %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block title %}
+Assign Staff
+{% endblock %}
 
-<body>
+{% block content %}
 
 <div class="container mt-5">
 
-    <h2>Assign Staff to {{ trek.name }}</h2>
+    <div class="row justify-content-center">
 
-    <form method="POST">
+        <div class="col-md-8 col-lg-6">
 
-        <div class="mb-3">
+            <div class="card shadow">
 
-            <label class="form-label">Select Staff</label>
+                <div class="card-header bg-success text-white">
 
-            <select name="staff_id" class="form-control" required>
+                    <h3 class="mb-0">
+                        Assign Staff
+                    </h3>
 
-                {% for staff in staff_members %}
+                </div>
 
-                    <option value="{{ staff.id }}">
-                        {{ staff.username }}
-                    </option>
+                <div class="card-body">
 
-                {% endfor %}
+                    <p class="mb-4">
 
-            </select>
+                        Assign a staff member for the trek:
+
+                        <strong>{{ trek.name }}</strong>
+
+                    </p>
+
+                    <form method="POST">
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Select Staff Member
+                            </label>
+
+                            <select
+                                name="staff_id"
+                                class="form-select"
+                                required>
+
+                                {% for staff in staff_members %}
+
+                                <option value="{{ staff.id }}">
+
+                                    {{ staff.username }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a href="{{ url_for('dashboard.manage_treks') }}"
+                               class="btn btn-secondary">
+
+                                Cancel
+
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                Assign Staff
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <button class="btn btn-success">
-            Assign Staff
-        </button>
-
-        <a href="{{ url_for('dashboard.manage_treks') }}"
-           class="btn btn-secondary">
-            Cancel
-        </a>
-
-    </form>
+    </div>
 
 </div>
 
-</body>
-</html>
+{% endblock %}

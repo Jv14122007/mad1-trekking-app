@@ -1,90 +1,147 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Trek</title>
+{% extends "base.html" %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block title %}
+Edit Trek
+{% endblock %}
 
-<body>
+{% block content %}
 
 <div class="container mt-5">
 
-    <h2>Edit Trek</h2>
+    <div class="row justify-content-center">
 
-    <form method="POST">
+        <div class="col-md-8 col-lg-6">
 
-        <div class="mb-3">
-            <label class="form-label">Trek Name</label>
-            <input
-                type="text"
-                class="form-control"
-                name="name"
-                value="{{ trek.name }}"
-                required>
+            <div class="card shadow">
+
+                <div class="card-header bg-success text-white">
+
+                    <h3 class="mb-0">
+                        Edit Trek
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Trek Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                value="{{ trek.name }}"
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Location
+                            </label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                class="form-control"
+                                value="{{ trek.location }}"
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Difficulty
+                            </label>
+
+                            <select
+                                name="difficulty"
+                                class="form-select">
+
+                                <option {% if trek.difficulty=="Easy" %}selected{% endif %}>
+                                    Easy
+                                </option>
+
+                                <option {% if trek.difficulty=="Moderate" %}selected{% endif %}>
+                                    Moderate
+                                </option>
+
+                                <option {% if trek.difficulty=="Difficult" %}selected{% endif %}>
+                                    Difficult
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Trek Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="date"
+                                class="form-control"
+                                value="{{ trek.date }}"
+                                required>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Available Slots
+                            </label>
+
+                            <input
+                                type="number"
+                                name="slots"
+                                min="1"
+                                class="form-control"
+                                value="{{ trek.slots }}"
+                                required>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a href="{{ url_for('dashboard.manage_treks') }}"
+                               class="btn btn-secondary">
+
+                                Cancel
+
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                Update Trek
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Location</label>
-            <input
-                type="text"
-                class="form-control"
-                name="location"
-                value="{{ trek.location }}"
-                required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Difficulty</label>
-
-            <select class="form-control" name="difficulty">
-
-                <option {% if trek.difficulty=="Easy" %}selected{% endif %}>Easy</option>
-
-                <option {% if trek.difficulty=="Moderate" %}selected{% endif %}>Moderate</option>
-
-                <option {% if trek.difficulty=="Hard" %}selected{% endif %}>Hard</option>
-
-            </select>
-
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Date</label>
-
-            <input
-                type="date"
-                class="form-control"
-                name="date"
-                value="{{ trek.date }}"
-                required>
-
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Slots</label>
-
-            <input
-                type="number"
-                class="form-control"
-                name="slots"
-                value="{{ trek.slots }}"
-                required>
-
-        </div>
-
-        <button class="btn btn-success">
-            Update Trek
-        </button>
-
-        <a href="{{ url_for('dashboard.manage_treks') }}"
-           class="btn btn-secondary">
-            Cancel
-        </a>
-
-    </form>
+    </div>
 
 </div>
 
-</body>
-</html>
+{% endblock %}
