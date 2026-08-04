@@ -1,242 +1,392 @@
-/* =====================================
-   GENERAL
-===================================== */
+/* ==========================================
+            GLOBAL STYLES
+========================================== */
+
+html{
+    scroll-behavior:smooth;
+}
 
 body{
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0;
-    background-color: #f5f5f5;
-    color: #333;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f5f7f4;
+    color:#333;
+    margin:0;
+    padding:0;
 }
 
-/* =====================================
-   NAVBAR
-===================================== */
-
-.navbar{
-    padding-top: 8px;
-    padding-bottom: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+section{
+    scroll-margin-top:80px;
 }
 
-.navbar-brand{
-    font-size: 30px;
-    font-weight: bold;
-    color: #1B5E20 !important;
-    letter-spacing: 1px;
+a{
+    text-decoration:none;
 }
 
-.navbar-brand:hover{
-    color: #145A32 !important;
+/* ==========================================
+                NAVBAR
+========================================== */
+
+.custom-navbar{
+    background:#2E7D32;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+    padding:10px 0;
 }
 
-.nav-link{
-    color: #1B5E20 !important;
-    font-weight: 600;
-    margin-left: 12px;
+.custom-navbar .navbar-brand{
+    color:#fff !important;
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:1px;
 }
 
-.nav-link:hover{
-    color: #0B3D20 !important;
+.custom-navbar .navbar-brand:hover{
+    color:#E8F5E9 !important;
 }
 
-/* =====================================
-   HERO SECTION
-===================================== */
+.custom-navbar .nav-link{
+    color:#E8F5E9 !important;
+    font-weight:600;
+    margin-left:15px;
+    transition:.3s;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active{
+    color:#fff !important;
+}
+
+.custom-navbar .navbar-toggler{
+    border-color:#fff;
+}
+
+/* ==========================================
+                HERO
+========================================== */
 
 .hero{
 
-    min-height: calc(100vh - 60px);
+    min-height:100vh;
 
     background-image:
-        linear-gradient(rgba(0,0,0,0.40), rgba(0,0,0,0.40)),
+        linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
         url("../images/Hill.jpeg");
 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-    text-align: center;
-    color: white;
-    padding: 20px;
+    text-align:center;
+
+    color:white;
+
+    padding:20px;
+
 }
 
 .hero-content{
-    max-width: 750px;
-    padding: 20px;
+
+    max-width:800px;
+
 }
 
 .hero-content h1{
 
-    font-size: 4rem;
-    font-weight: 700;
-    margin-bottom: 20px;
+    font-size:4rem;
 
-    text-shadow: 3px 3px 8px rgba(0,0,0,0.7);
+    font-weight:700;
+
+    text-shadow:3px 3px 10px rgba(0,0,0,.6);
+
+    margin-bottom:20px;
+
 }
 
 .hero-content p{
 
-    font-size: 22px;
-    margin-bottom: 25px;
-    line-height: 1.6;
+    font-size:22px;
 
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+    line-height:1.7;
+
+    text-shadow:2px 2px 8px rgba(0,0,0,.6);
+
+    margin-bottom:35px;
+
 }
 
-/* =====================================
-   BUTTONS
-===================================== */
-
-.btn-login{
-
-    background: white;
-    color: #2E7D32;
-    border: 2px solid #2E7D32;
-
-    transition: all 0.3s ease;
-}
-
-.btn-login:hover{
-
-    background: #2E7D32;
-    color: white;
-}
-
-.btn-register{
-
-    background: #2E7D32;
-    color: white;
-    border: 2px solid #2E7D32;
-
-    transition: all 0.3s ease;
-}
-
-.btn-register:hover{
-
-    background: #1B5E20;
-    border-color: #1B5E20;
-}
+/* ==========================================
+                BUTTONS
+========================================== */
 
 .btn{
 
-    transition: all .3s ease;
+    transition:.3s;
+
+    border-radius:8px;
+
+    font-weight:600;
+
 }
 
 .btn:hover{
 
-    transform: translateY(-2px);
+    transform:translateY(-3px);
+
 }
 
-/* =====================================
-   CARDS
-===================================== */
+.btn-login{
+
+    color:#fff;
+
+    border:1px solid #fff;
+
+    background:transparent;
+
+}
+
+.btn-login:hover{
+
+    background:#fff;
+
+    color:#2E7D32;
+
+}
+
+.btn-register{
+
+    background:#fff;
+
+    color:#2E7D32;
+
+    border:1px solid #fff;
+
+}
+
+.btn-register:hover{
+
+    background:#f1f1f1;
+
+    color:#1B5E20;
+
+}
+
+/* ==========================================
+                CARDS
+========================================== */
 
 .card{
 
-    border: none;
-    border-radius: 15px;
+    border:none;
 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+    border-radius:15px;
 
-    transition: 0.3s;
+    overflow:hidden;
+
+    transition:.3s;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
 }
 
 .card:hover{
 
-    transform: translateY(-5px);
+    transform:translateY(-8px);
 
-    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    box-shadow:0 15px 30px rgba(0,0,0,.15);
+
 }
 
-/* =====================================
-   TABLES
-===================================== */
+.card-header{
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+                TABLES
+========================================== */
 
 .table{
 
-    background: white;
+    background:white;
 
-    border-radius: 12px;
+    border-radius:12px;
 
-    overflow: hidden;
+    overflow:hidden;
+
 }
 
 .table th{
 
-    background: #198754;
+    background:#198754;
 
-    color: white;
+    color:white;
+
+    vertical-align:middle;
+
 }
 
-/* =====================================
-   FORMS
-===================================== */
+.table td{
+
+    vertical-align:middle;
+
+}
+
+/* ==========================================
+                FORMS
+========================================== */
 
 form{
 
-    padding: 15px;
+    padding:10px;
 
-    border-radius: 15px;
-
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-.form-control{
+.form-control,
+.form-select{
 
-    border-radius: 8px;
+    border-radius:8px;
+
 }
 
-.form-control:focus{
+.form-control:focus,
+.form-select:focus{
 
-    border-color: #198754;
+    border-color:#198754;
 
-    box-shadow: 0 0 0 .2rem rgba(25,135,84,.25);
+    box-shadow:0 0 0 .2rem rgba(25,135,84,.2);
+
 }
 
-/* =====================================
-   ALERTS
-===================================== */
+/* ==========================================
+                BADGES
+========================================== */
+
+.badge{
+
+    font-size:.85rem;
+
+    padding:7px 10px;
+
+}
+
+/* ==========================================
+                ALERTS
+========================================== */
 
 .alert{
 
-    border-radius: 10px;
+    border:none;
+
+    border-radius:10px;
+
 }
 
-/* =====================================
-   FOOTER
-===================================== */
+/* ==========================================
+                FOOTER
+========================================== */
 
 footer{
 
-    margin-top: 60px;
+    background:#198754;
 
-    font-size: 15px;
+    color:white;
+
+    margin-top:60px;
+
+    padding:18px;
+
+    font-size:15px;
+
 }
 
-/* =====================================
-   RESPONSIVE
-===================================== */
+/* ==========================================
+            SECTION TITLES
+========================================== */
 
-@media(max-width:768px){
+h2{
+
+    font-weight:700;
+
+}
+
+.text-success{
+
+    color:#198754 !important;
+
+}
+
+/* ==========================================
+                RESPONSIVE
+========================================== */
+
+@media(max-width:992px){
 
     .hero-content h1{
 
-        font-size: 2.6rem;
+        font-size:3rem;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .hero{
+
+        min-height:75vh;
+
+    }
+
+    .hero-content h1{
+
+        font-size:2.3rem;
+
     }
 
     .hero-content p{
 
-        font-size: 18px;
+        font-size:18px;
+
     }
 
     .navbar-brand{
 
-        font-size: 24px;
+        font-size:24px !important;
+
+    }
+
+    .table{
+
+        font-size:14px;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .hero-content h1{
+
+        font-size:2rem;
+
+    }
+
+    .hero-content p{
+
+        font-size:16px;
+
+    }
+
+    .btn{
+
+        width:100%;
+
+        margin-bottom:10px;
+
     }
 
 }

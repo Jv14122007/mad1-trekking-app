@@ -1,153 +1,175 @@
 {% extends "base.html" %}
 
 {% block title %}
-Manage Treks
+Manage Treks | WannaTrek
 {% endblock %}
 
 {% block content %}
 
 <div class="container mt-5">
 
-    <!-- Heading -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-success">Trek Management</h2>
+        <p class="text-muted mb-0">
+            Total Treks: {{ treks|length }}
+        </p>
+    </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="{{ url_for('dashboard.create_trek') }}" class="btn btn-success">
+        + Create New Trek
+    </a>
+</div>
 
-        <h2 class="fw-bold text-success">
-            Manage Treks
-        </h2>
+{% if treks %}
 
-        <a href="{{ url_for('dashboard.create_trek') }}"
-           class="btn btn-success">
-            Create New Trek
+<div class="card shadow border-0">
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-bordered align-middle text-center">
+
+                <thead class="table-success">
+                    <tr>
+                        <th>ID</th>
+                        <th>Trek Name</th>
+                        <th>Location</th>
+                        <th>Difficulty</th>
+                        <th>Date</th>
+                        <th>Slots</th>
+                        <th>Status</th>
+                        <th>Assigned Staff</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for trek in treks %}
+                    <tr>
+
+                        <td>{{ trek.id }}</td>
+
+                        <td><strong>{{ trek.name }}</strong></td>
+
+                        <td>{{ trek.location }}</td>
+
+                        <td>
+                            {% if trek.difficulty == "Easy" %}
+                                <span class="badge bg-success">Easy</span>
+
+                            {% elif trek.difficulty == "Moderate" %}
+                                <span class="badge bg-warning text-dark">Moderate</span>
+
+                            {% else %}
+                                <span class="badge bg-danger">Hard</span>                            
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ trek.start_date.strftime('%d %b %Y') if trek.start_date else 'N/A' }}
+                        </td>
+
+                        <td>
+                            {% if trek.slots > 10 %}
+                                <span class="badge bg-success">{{ trek.slots }}</span>
+
+                            {% elif trek.slots > 0 %}
+                                <span class="badge bg-warning text-dark">{{ trek.slots }}</span>
+
+                            {% else %}
+                                <span class="badge bg-danger">Full</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% set status = trek.status|default('Open') %}
+
+                            {% if status == "Open" %}
+                                <span class="badge bg-success">Open</span>
+
+                            {% elif status == "Closed" %}
+                                <span class="badge bg-danger">Closed</span>
+
+                            {% elif status == "Completed" %}
+                                <span class="badge bg-primary">Completed</span>
+
+                            {% else %}
+                                <span class="badge bg-secondary">{{ status }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if trek.assigned_staff %}
+                                {{ trek.assigned_staff.username }}
+                            {% else %}
+                                <span class="text-muted">Not Assigned</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="d-flex flex-column gap-1">
+
+                                <a href="{{ url_for('dashboard.edit_trek', trek_id=trek.id) }}"
+                                   class="btn btn-primary btn-sm">
+                                    Edit
+                                </a>
+
+                                <a href="{{ url_for('dashboard.assign_staff', trek_id=trek.id) }}"
+                                   class="btn btn-info btn-sm text-white">
+                                    Staff
+                                </a>
+
+                                <a href="{{ url_for('dashboard.toggle_trek', trek_id=trek.id) }}"
+                                   class="btn btn-warning btn-sm">
+                                    {% if trek.status == "Open" %}
+                                        Close
+                                    {% else %}
+                                        Open
+                                    {% endif %}
+                                </a>
+
+                                <a href="{{ url_for('dashboard.delete_trek', trek_id=trek.id) }}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this trek?')">
+                                    Delete
+                                </a>
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+{% else %}
+
+<div class="card shadow border-0">
+    <div class="card-body text-center py-5">
+
+        <h4 class="text-muted">No Treks Available</h4>
+
+        <p class="text-secondary">
+            Create your first trek to start accepting bookings.
+        </p>
+
+        <a href="{{ url_for('dashboard.create_trek') }}" class="btn btn-success">
+            Create Trek
         </a>
 
     </div>
+</div>
 
-    <!-- Trek Table -->
-
-    {% if treks %}
-
-    <div class="table-responsive">
-
-        <table class="table table-bordered table-hover align-middle">
-
-            <thead class="table-success">
-
-                <tr>
-
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Difficulty</th>
-                    <th>Date</th>
-                    <th>Slots</th>
-                    <th>Status</th>
-                    <th>Assigned Staff</th>
-                    <th class="text-center">Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                {% for trek in treks %}
-
-                <tr>
-
-                    <td>{{ trek.name }}</td>
-
-                    <td>{{ trek.location }}</td>
-
-                    <td>{{ trek.difficulty }}</td>
-
-                    <td>{{ trek.date }}</td>
-
-                    <td>{{ trek.slots }}</td>
-
-                    <td>
-
-                        {% if trek.status == "Open" %}
-
-                            <span class="badge bg-success">
-                                Open
-                            </span>
-
-                        {% else %}
-
-                            <span class="badge bg-danger">
-                                Closed
-                            </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td>
-
-                        {% if trek.assigned_staff %}
-
-                            {{ trek.assigned_staff.username }}
-
-                        {% else %}
-
-                            <span class="text-muted">
-                                Not Assigned
-                            </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td class="text-center">
-
-                        <a href="{{ url_for('dashboard.toggle_trek', trek_id=trek.id) }}"
-                           class="btn btn-warning btn-sm mb-1">
-
-                            {% if trek.status == "Open" %}
-                                Close
-                            {% else %}
-                                Open
-                            {% endif %}
-
-                        </a>
-
-                        <a href="{{ url_for('dashboard.edit_trek', trek_id=trek.id) }}"
-                           class="btn btn-primary btn-sm mb-1">
-                            Edit
-                        </a>
-
-                        <a href="{{ url_for('dashboard.assign_staff', trek_id=trek.id) }}"
-                           class="btn btn-info btn-sm text-white mb-1">
-                            Assign Staff
-                        </a>
-
-                        <a href="{{ url_for('dashboard.delete_trek', trek_id=trek.id) }}"
-                           class="btn btn-danger btn-sm mb-1"
-                           onclick="return confirm('Are you sure you want to delete this trek?')">
-                            Delete
-                        </a>
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    {% else %}
-
-    <div class="alert alert-info">
-
-        No treks have been created yet.
-
-    </div>
-
-    {% endif %}
+{% endif %}
 
 </div>
 

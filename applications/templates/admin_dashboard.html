@@ -8,195 +8,133 @@ Admin Dashboard
 
 <div class="container mt-5">
 
-    <!-- Page Heading -->
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-success">
+        Admin Dashboard
+    </h2>
+</div>
 
-        <h2 class="fw-bold text-success">
-            Admin Dashboard
-        </h2>
-
-    </div>
-
-    <!-- Quick Actions -->
-
+<!-- Quick Actions -->
+<div class="mb-4">
     <div class="mb-4">
 
-        <a href="{{ url_for('dashboard.create_trek') }}"
-           class="btn btn-success me-2">
-            Create Trek
-        </a>
+    <a href="{{ url_for('dashboard.create_trek') }}"
+       class="btn btn-success me-2 mb-2">
+        + Create Trek
+    </a>
 
-        <a href="{{ url_for('dashboard.manage_treks') }}"
-           class="btn btn-primary me-2">
-            Manage Treks
-        </a>
+    <a href="{{ url_for('dashboard.manage_treks') }}"
+       class="btn btn-primary me-2 mb-2">
+        Manage Treks
+    </a>
 
-        <a href="{{ url_for('dashboard.manage_bookings') }}"
-           class="btn btn-info text-white">
-            View Bookings
-        </a>
+    <a href="{{ url_for('dashboard.manage_bookings') }}"
+       class="btn btn-info text-white mb-2">
+        View Bookings
+    </a>
 
+</div>
+</div>
+<div class="row g-4">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center h-100 border-0">
+            <div class="card-body">
+                <h6 class="text-muted">Total Users</h6>
+                <h2 class="text-success fw-bold">
+                    {{ total_users }}
+                </h2>
+            </div>
+        </div>
     </div>
 
-    <!-- Statistics -->
-
-    <div class="row g-4">
-
-        <div class="col-md-3">
-
-            <div class="card text-center h-100">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Total Users
-                    </h6>
-
-                    <h2 class="text-success fw-bold">
-                        {{ total_users }}
-                    </h2>
-
-                </div>
-
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center h-100 border-0">
+            <div class="card-body">
+                <h6 class="text-muted">Total Staff</h6>
+                <h2 class="text-success fw-bold">
+                    {{ total_staff }}
+                </h2>
             </div>
-
         </div>
-
-        <div class="col-md-3">
-
-            <div class="card text-center h-100">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Total Staff
-                    </h6>
-
-                    <h2 class="text-success fw-bold">
-                        {{ total_staff }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <div class="card text-center h-100">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Total Treks
-                    </h6>
-
-                    <h2 class="text-success fw-bold">
-                        {{ total_treks }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <div class="card text-center h-100">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Total Bookings
-                    </h6>
-
-                    <h2 class="text-success fw-bold">
-                        {{ total_bookings }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
 
-    <!-- Pending Staff -->
-
-    <div class="mt-5">
-
-        <h3 class="mb-3">
-            Pending Staff Approvals
-        </h3>
-
-        {% if pending_staff %}
-
-        <div class="table-responsive">
-
-            <table class="table table-bordered table-hover align-middle">
-
-                <thead class="table-success">
-
-                    <tr>
-
-                        <th>Username</th>
-
-                        <th>Email</th>
-
-                        <th class="text-center">
-                            Action
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {% for staff in pending_staff %}
-
-                    <tr>
-
-                        <td>{{ staff.username }}</td>
-
-                        <td>{{ staff.email }}</td>
-
-                        <td class="text-center">
-
-                            <a href="{{ url_for('dashboard.approve_staff', user_id=staff.id) }}"
-                               class="btn btn-success btn-sm">
-
-                                Approve
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center h-100 border-0">
+            <div class="card-body">
+                <h6 class="text-muted">Total Treks</h6>
+                <h2 class="text-success fw-bold">
+                    {{ total_treks }}
+                </h2>
+            </div>
         </div>
-
-        {% else %}
-
-        <div class="alert alert-success">
-
-            No pending staff approval requests.
-
-        </div>
-
-        {% endif %}
-
     </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center h-100 border-0">
+            <div class="card-body">
+                <h6 class="text-muted">Total Bookings</h6>
+                <h2 class="text-success fw-bold">
+                    {{ total_bookings }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="mt-5">
+
+    <h4 class="fw-semibold mb-3">
+        Pending Staff Approvals
+    </h4>
+
+    {% if pending_staff %}
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-success text-center">
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for staff in pending_staff %}
+
+                <tr>
+                    <td>{{ staff.username }}</td>
+                    <td>{{ staff.email }}</td>
+
+                    <td class="text-center">
+                        <a href="{{ url_for('dashboard.approve_staff', user_id=staff.id) }}"
+                           class="btn btn-success btn-sm">
+                            Approve
+                        </a>
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-success text-center">
+        No pending staff approval requests 
+    </div>
+
+    {% endif %}
+
+</div>
 
 </div>
 

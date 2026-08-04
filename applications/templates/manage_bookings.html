@@ -1,99 +1,176 @@
 {% extends "base.html" %}
 
+
 {% block title %}
-Manage Bookings
+Manage Bookings | WannaTrek
 {% endblock %}
+
+
 
 {% block content %}
 
+
 <div class="container mt-5">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h2 class="fw-bold text-success">
-            All Bookings
-        </h2>
+<h2 class="fw-bold text-success mb-4">
+Booking Management
+</h2>
 
-    </div>
 
-    {% if bookings %}
 
-    <div class="table-responsive">
+{% if bookings %}
 
-        <table class="table table-bordered table-hover align-middle">
 
-            <thead class="table-success">
+<div class="card shadow border-0">
 
-                <tr>
 
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Trek</th>
-                    <th>Booking Date</th>
-                    <th>Status</th>
+<div class="card-body">
 
-                </tr>
 
-            </thead>
+<div class="table-responsive">
 
-            <tbody>
 
-                {% for booking in bookings %}
+<table class="table table-hover table-bordered align-middle text-center">
 
-                <tr>
 
-                    <td>{{ booking.user.username }}</td>
+<thead class="table-success">
 
-                    <td>{{ booking.user.email }}</td>
+<tr>
 
-                    <td>{{ booking.trek.name }}</td>
+<th>#</th>
 
-                    <td>{{ booking.booking_date }}</td>
+<th>User</th>
 
-                    <td>
+<th>Email</th>
 
-                        {% if booking.status == "Confirmed" %}
+<th>Trek</th>
 
-                            <span class="badge bg-success">
-                                Confirmed
-                            </span>
+<th>Location</th>
 
-                        {% elif booking.status == "Cancelled" %}
+<th>Booking Date</th>
 
-                            <span class="badge bg-danger">
-                                Cancelled
-                            </span>
+<th>Status</th>
 
-                        {% else %}
+</tr>
 
-                            <span class="badge bg-warning text-dark">
-                                {{ booking.status }}
-                            </span>
+</thead>
 
-                        {% endif %}
 
-                    </td>
 
-                </tr>
+<tbody>
 
-                {% endfor %}
 
-            </tbody>
+{% for booking in bookings %}
 
-        </table>
 
-    </div>
+<tr>
 
-    {% else %}
 
-    <div class="alert alert-info">
+<td>
+{{ loop.index }}
+</td>
 
-        No bookings found.
 
-    </div>
+<td>
+{{ booking.user.username }}
+</td>
 
-    {% endif %}
+
+<td>
+{{ booking.user.email }}
+</td>
+
+
+<td>
+{{ booking.trek.name }}
+</td>
+
+
+<td>
+{{ booking.trek.location }}
+</td>
+
+
+<td>
+
+{{ booking.booking_date.strftime('%d %b %Y') }}
+
+</td>
+
+
+<td>
+
+
+{% if booking.status == "Booked" %}
+
+<span class="badge bg-success">
+Booked
+</span>
+
+
+{% else %}
+
+<span class="badge bg-secondary">
+{{ booking.status }}
+</span>
+
+
+{% endif %}
+
+
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
 
 </div>
+
+
+</div>
+
+
+</div>
+
+
+{% else %}
+
+
+<div class="card shadow border-0">
+
+<div class="card-body text-center py-5">
+
+
+<h4 class="text-muted">
+No bookings available
+</h4>
+
+
+<p class="text-secondary">
+Bookings made by users will appear here.
+</p>
+
+
+</div>
+
+</div>
+
+
+{% endif %}
+
+
+
+</div>
+
 
 {% endblock %}

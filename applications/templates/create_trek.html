@@ -8,130 +8,139 @@ Create Trek
 
 <div class="container mt-5">
 
-    <div class="row justify-content-center">
+<div class="row justify-content-center">
 
-        <div class="col-md-8 col-lg-6">
+    <div class="col-lg-7">
 
-            <div class="card shadow">
+        <div class="card shadow border-0">
 
-                <div class="card-header bg-success text-white">
+            <!-- Header -->
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    Create New Trek
+                </h4>
+            </div>
 
-                    <h3 class="mb-0">
-                        Create New Trek
-                    </h3>
+            <!-- Body -->
+            <div class="card-body">
 
-                </div>
+                <form method="POST">
 
-                <div class="card-body">
+                    <!-- Trek Name -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Trek Name
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            placeholder="Enter trek name"
+                            required>
+                    </div>
 
-                    <form method="POST">
+                    <!-- Location -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Location
+                        </label>
+                        <input
+                            type="text"
+                            name="location"
+                            class="form-control"
+                            placeholder="Enter trek location"
+                            required>
+                    </div>
 
-                        <div class="mb-3">
+                    <!-- Difficulty -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            Difficulty
+                        </label>
+                        <select
+                            name="difficulty"
+                            class="form-select"
+                            required>
+                            <option value="" disabled selected>
+                                -- Select Difficulty --
+                            </option>
+                            <option value="Easy">Easy</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
 
-                            <label class="form-label">
-                                Trek Name
-                            </label>
 
-                            <input
-                                type="text"
-                                name="name"
-                                class="form-control"
-                                placeholder="Enter trek name"
-                                required>
+                    <!-- Dates -->
+                    <div class="row">
 
-                        </div>
+    <div class="col-md-6 mb-3">
+        <label class="form-label">
+            Start Date
+        </label>
 
-                        <div class="mb-3">
+        <input
+            type="date"
+            name="start_date"
+            class="form-control"
+            required>
+    </div>
 
-                            <label class="form-label">
-                                Location
-                            </label>
 
-                            <input
-                                type="text"
-                                name="location"
-                                class="form-control"
-                                placeholder="Enter location"
-                                required>
+    <div class="col-md-6 mb-3">
+        <label class="form-label">
+            End Date
+        </label>
 
-                        </div>
+        <input
+            type="date"
+            name="end_date"
+            class="form-control"
+            required>
+    </div>
 
-                        <div class="mb-3">
+</div>
 
-                            <label class="form-label">
-                                Difficulty
-                            </label>
+                    <!-- Slots -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Available Slots
+                        </label>
+                        <input
+                            type="number"
+                            name="slots"
+                            min="1"
+                            class="form-control"
+                            placeholder="Enter available slots"
+                            required>
+                    </div>
 
-                            <select
-                                name="difficulty"
-                                class="form-select">
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between">
 
-                                <option>Easy</option>
-                                <option>Moderate</option>
-                                <option>Difficult</option>
+                        <a href="{{ url_for('dashboard.manage_treks') }}"
+                           class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
 
-                            </select>
+                        <button
+                            type="submit"
+                            class="btn btn-success">
+                            Create Trek
+                        </button>
 
-                        </div>
+                    </div>
 
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Trek Date
-                            </label>
-
-                            <input
-                                type="date"
-                                name="date"
-                                class="form-control"
-                                required>
-
-                        </div>
-
-                        <div class="mb-4">
-
-                            <label class="form-label">
-                                Available Slots
-                            </label>
-
-                            <input
-                                type="number"
-                                name="slots"
-                                min="1"
-                                class="form-control"
-                                placeholder="Enter number of slots"
-                                required>
-
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-
-                            <a href="{{ url_for('dashboard.manage_treks') }}"
-                               class="btn btn-secondary">
-
-                                Cancel
-
-                            </a>
-
-                            <button
-                                type="submit"
-                                class="btn btn-success">
-
-                                Create Trek
-
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 
         </div>
 
     </div>
+
+</div>
+
 
 </div>
 

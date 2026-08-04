@@ -10,28 +10,37 @@ Available Treks
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <h2 class="fw-bold text-success">
-            Available Treks
-        </h2>
+        <div>
+            <h2 class="fw-bold text-success">
+                Available Treks
+            </h2>
+
+            <p class="text-muted mb-0">
+                Browse open treks and book your next adventure.
+            </p>
+        </div>
 
     </div>
 
     {% if treks %}
 
-    <div class="table-responsive">
+    <div class="table-responsive shadow rounded">
 
-        <table class="table table-bordered table-hover align-middle">
+        <table class="table table-hover table-bordered align-middle mb-0">
 
             <thead class="table-success">
 
                 <tr>
 
-                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Trek</th>
                     <th>Location</th>
                     <th>Difficulty</th>
                     <th>Date</th>
+                    <th>Duration</th>
                     <th>Available Slots</th>
-                    <th>Assigned Staff</th>
+                    <th>Status</th>
+                    <th>Guide</th>
                     <th class="text-center">Action</th>
 
                 </tr>
@@ -44,37 +53,82 @@ Available Treks
 
                 <tr>
 
-                    <td>{{ trek.name }}</td>
+                    <td>
+                        {{ trek.id }}
+                    </td>
 
+                    <td class="fw-bold">
+                        {{ trek.name }}
+                    </td>
+
+                
                     <td>{{ trek.location }}</td>
+                    <td>{{ trek.start_date.strftime('%d %b %Y') if trek.start_date else 'N/A' }}</td>
+                    <td>{{ trek.end_date.strftime('%d %b %Y') if trek.end_date else 'N/A' }}</td>
+                    <td>
+                        {% if trek.difficulty == 'Hard' or trek.difficulty == 'Difficult' %}
+                        <span class="badge bg-danger">{{ trek.difficulty }}</span>
+                        {% elif trek.difficulty == 'Moderate' %}
+                        <span class="badge bg-warning text-dark">{{ trek.difficulty }}</span>
+                        {% else %}
+                        <span class="badge bg-success">{{ trek.difficulty }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ trek.price }}</td>
+                    </tr>
+
 
                     <td>
 
-                        {% if trek.difficulty == "Easy" %}
+                        {% if trek.slots > 0 %}
 
-                            <span class="badge bg-success">
-                                Easy
-                            </span>
+                        <span class="badge bg-success">
 
-                        {% elif trek.difficulty == "Moderate" %}
+                            {{ trek.slots }}
 
-                            <span class="badge bg-warning text-dark">
-                                Moderate
-                            </span>
+                        </span>
 
                         {% else %}
 
-                            <span class="badge bg-danger">
-                                Difficult
-                            </span>
+                        <span class="badge bg-danger">
+
+                            Full
+
+                        </span>
 
                         {% endif %}
 
                     </td>
 
-                    <td>{{ trek.date }}</td>
+                    <td>
 
-                    <td>{{ trek.slots }}</td>
+                        {% if trek.status=="Open" %}
+
+                        <span class="badge bg-success">
+                            Open
+                        </span>
+
+                        {% elif trek.status=="Closed" %}
+
+                        <span class="badge bg-danger">
+                            Closed
+                        </span>
+
+                        {% elif trek.status=="Completed" %}
+
+                        <span class="badge bg-secondary">
+                            Completed
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-warning text-dark">
+                            {{ trek.status }}
+                        </span>
+
+                        {% endif %}
+
+                    </td>
 
                     <td>
 
@@ -85,7 +139,9 @@ Available Treks
                         {% else %}
 
                             <span class="text-muted">
+
                                 Not Assigned
+
                             </span>
 
                         {% endif %}
@@ -94,12 +150,32 @@ Available Treks
 
                     <td class="text-center">
 
+                        {% if trek.status=="Open" and trek.slots>0 %}
+
                         <a href="{{ url_for('dashboard.book_trek', trek_id=trek.id) }}"
                            class="btn btn-success btn-sm">
 
                             Book Trek
 
                         </a>
+
+                        {% elif trek.slots<=0 %}
+
+                        <button class="btn btn-secondary btn-sm" disabled>
+
+                            Full
+
+                        </button>
+
+                        {% else %}
+
+                        <button class="btn btn-danger btn-sm" disabled>
+
+                            Closed
+
+                        </button>
+
+                        {% endif %}
 
                     </td>
 
@@ -115,9 +191,16 @@ Available Treks
 
     {% else %}
 
-    <div class="alert alert-info">
+    <div class="alert alert-info shadow-sm">
 
-        No treks are currently available.
+        <h5>No Treks Available</h5>
+
+        <p class="mb-0">
+
+            There are currently no open trekking events.
+            Please check back later.
+
+        </p>
 
     </div>
 

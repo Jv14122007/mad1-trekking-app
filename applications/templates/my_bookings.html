@@ -1,115 +1,151 @@
 {% extends "base.html" %}
 
 {% block title %}
-My Bookings
+My Bookings | WannaTrek
 {% endblock %}
 
 {% block content %}
 
 <div class="container mt-5">
 
-    <h2 class="fw-bold text-success mb-4">
-        My Bookings
-    </h2>
-
-    {% if bookings %}
-
-    <div class="table-responsive">
-
-        <table class="table table-bordered table-hover align-middle">
-
-            <thead class="table-success">
-
-                <tr>
-
-                    <th>Trek Name</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th class="text-center">Action</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                {% for booking in bookings %}
-
-                <tr>
-
-                    <td>{{ booking.trek.name }}</td>
-
-                    <td>{{ booking.trek.location }}</td>
-
-                    <td>{{ booking.trek.date }}</td>
-
-                    <td>
-
-                        {% if booking.status == "Confirmed" %}
-
-                            <span class="badge bg-success">
-                                Confirmed
-                            </span>
-
-                        {% elif booking.status == "Cancelled" %}
-
-                            <span class="badge bg-danger">
-                                Cancelled
-                            </span>
-
-                        {% else %}
-
-                            <span class="badge bg-warning text-dark">
-                                {{ booking.status }}
-                            </span>
-
-                        {% endif %}
-
-                    </td>
-
-                    <td class="text-center">
-
-                        {% if booking.status != "Cancelled" %}
-
-                        <a href="{{ url_for('dashboard.cancel_booking', booking_id=booking.id) }}"
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Are you sure you want to cancel this booking?')">
-
-                            Cancel
-
-                        </a>
-
-                        {% else %}
-
-                        <span class="text-muted">
-                            —
-                        </span>
-
-                        {% endif %}
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-success">My Trek Bookings</h2>
+        <p class="text-muted mb-0">
+            Total Bookings: {{ bookings|length }}
+        </p>
     </div>
 
-    {% else %}
+    <a href="{{ url_for('dashboard.user_treks') }}" class="btn btn-success">
+        Explore More Treks
+    </a>
+</div>
 
-    <div class="alert alert-info">
+{% if bookings %}
 
-        You haven't booked any treks yet.
+<div class="card shadow border-0">
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-bordered align-middle text-center">
+
+                <thead class="table-success">
+                    <tr>
+                        <th>#</th>
+                        <th>Trek</th>
+                        <th>Location</th>
+                        <th>Difficulty</th>
+                        <th>Date</th>
+                        <th>Booking Status</th>
+                        <th>Trek Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for booking in bookings %}
+                    <tr>
+
+                        <td>{{ loop.index }}</td>
+
+                        <td><strong>{{ booking.trek.name }}</strong></td>
+
+                        <td>{{ booking.trek.location }}</td>
+
+                        <td>
+                            {% if booking.trek.difficulty == "Easy" %}
+                                <span class="badge bg-success">Easy</span>
+
+                            {% elif booking.trek.difficulty == "Moderate" %}
+                                <span class="badge bg-warning text-dark">Moderate</span>
+
+                            {% else %}
+                                <span class="badge bg-danger">Difficult</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                        {{ booking.trek.start_date.strftime('%d %b %Y') if booking.trek.start_date else 'N/A' }}                        </td>
+
+                        <td>
+                            {% set b_status = booking.status|default('Pending') %}
+
+                            {% if b_status == "Booked" %}
+                                <span class="badge bg-success">Booked</span>
+
+                            {% elif b_status == "Cancelled" %}
+                                <span class="badge bg-danger">Cancelled</span>
+
+                            {% elif b_status == "Completed" %}
+                                <span class="badge bg-primary">Completed</span>
+
+                            {% else %}
+                                <span class="badge bg-secondary">{{ b_status }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% set t_status = booking.trek.status|default('Open') %}
+
+                            {% if t_status == "Open" %}
+                                <span class="badge bg-success">Open</span>
+
+                            {% elif t_status == "Closed" %}
+                                <span class="badge bg-danger">Closed</span>
+
+                            {% elif t_status == "Completed" %}
+                                <span class="badge bg-primary">Completed</span>
+
+                            {% else %}
+                                <span class="badge bg-secondary">{{ t_status }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if b_status == "Booked" %}
+                                <a href="{{ url_for('dashboard.cancel_booking', booking_id=booking.id) }}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                    Cancel
+                                </a>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
+</div>
 
-    {% endif %}
+{% else %}
 
+<div class="card shadow border-0">
+    <div class="card-body text-center py-5">
+
+        <h4 class="text-muted">No Bookings Yet</h4>
+
+        <p class="text-secondary">
+            You haven't booked any treks yet. Start exploring adventures today!
+        </p>
+
+        <a href="{{ url_for('dashboard.user_treks') }}" class="btn btn-success">
+            Browse Treks
+        </a>
+
+    </div>
+</div>
+
+{% endif %}
 </div>
 
 {% endblock %}

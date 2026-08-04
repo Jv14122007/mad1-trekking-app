@@ -1,275 +1,281 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>WannaTrek</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
+<!-- NAVBAR -->
 
-<div class="container mt-3">
-
-    {% for message in messages %}
-
-    <div class="alert alert-success alert-dismissible fade show">
-
-        {{ message }}
-
-        <button class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-
-    </div>
-
-    {% endfor %}
-
-</div>
-
-{% endif %}
-{% endwith %}
-
-<nav class="navbar navbar-expand-lg navbar-light"
-     style="background-color: rgba(111,189,111,0.95);">
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow">
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="#">
-            WannaTrek
-        </a>
+    <a class="navbar-brand fw-bold fs-3" href="{{ url_for('home') }}">
+        WannaTrek
+    </a>
 
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <span class="navbar-toggler-icon"></span>
+    <div class="collapse navbar-collapse" id="navbarNav">
 
-        </button>
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#treks">Treks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#contact">Contact</a>
+            </li>
+        </ul>
 
-        <div class="collapse navbar-collapse"
-             id="navbarNav">
-
-            <ul class="navbar-nav me-auto">
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Treks</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-
-            </ul>
-
-            <div>
-
-                <a href="{{ url_for('auth.login') }}"
-                   class="btn btn-login me-2">
-                    Login
-                </a>
-
-                <a href="{{ url_for('auth.register') }}"
-                   class="btn btn-register">
-                    Register
-                </a>
-
-            </div>
-
+        <div class="d-flex align-items-center">
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2 px-4">
+                Login
+            </a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-light text-success px-4">
+                Register
+            </a>
         </div>
 
     </div>
+</div>
+
 
 </nav>
 
 <!-- HERO -->
 
-<section class="hero">
+<section class="hero text-white text-center d-flex align-items-center">
+    <div class="container">
+        <h1 class="fw-bold">
+            Discover Your Next Adventure
+        </h1>
+        <p class="lead">
+            Explore India's most breathtaking trekking destinations with experienced trek leaders.
+        </p>
 
-<div class="hero-content">
 
-<h1>
-Discover Your Next Adventure
-</h1>
-
-<p>
-
-Experience breathtaking trekking destinations,
-book your trek online,
-and explore nature like never before.
-
-</p>
-
-<div class="mt-4">
-
-<a href="{{ url_for('auth.register') }}"
-class="btn btn-register btn-lg me-3">
-
-Get Started
-
-</a>
-
-<a href="{{ url_for('auth.login') }}"
-class="btn btn-login btn-lg">
-
-Login
-
-</a>
-
+    <div class="mt-4">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light text-success fw-bold btn-lg me-3">
+            Get Started
+        </a>
+        <a href="#treks" class="btn btn-outline-light btn-lg">
+            Explore Treks
+        </a>
+    </div>
 </div>
 
-</div>
 
 </section>
 
-<!-- FEATURES -->
+<!-- TREKS -->
 
-<!-- FEATURES -->
+<section id="treks" class="py-5">
+    <div class="container">
 
-<section class="container py-5">
 
-    <div class="text-center mb-5">
-
-        <h2 class="fw-bold">
-            Why Choose WannaTrek?
-        </h2>
-
-        <p class="text-muted">
-            Everything you need for a safe and memorable trekking experience.
-        </p>
-
-    </div>
+    <h2 class="text-center text-success fw-bold mb-5">
+        Top Trekking Destinations
+    </h2>
 
     <div class="row g-4">
 
-        <div class="col-md-4">
+        <!-- Trek Card -->
+        {% for trek in [
+            ("Chadar Trek","Ladakh","Very Difficult","Jan–Feb","Experienced trekkers","Walk across frozen Zanskar River."),
+            ("Kedarnath Trek","Uttarakhand","Moderate","May–June, Sep–Oct","Pilgrims & Nature Lovers","Scenic journey to Kedarnath Temple."),
+            ("Kumara Parvatha","Karnataka","Difficult","Oct–Feb","Experienced hikers","Dense forest and steep ridges."),
+            ("Chembra Peak","Kerala","Easy–Moderate","Sep–Feb","Families & beginners","Famous heart-shaped lake trek."),
+            ("Girnar Trek","Gujarat","Moderate","Nov–Feb","Pilgrims & trekkers","Sacred hill climb."),
+            ("Harishchandragad","Maharashtra","Difficult","Oct–Feb","Adventure lovers","Historic forts & Konkan Kada."),
+            ("Sandakphu","West Bengal","Moderate–Difficult","Apr–May, Oct–Dec","Photographers","View Everest range."),
+            ("Deomali Trek","Odisha","Easy","Oct–Feb","Beginners","Peaceful hill trek.")
+        ] %}
 
-            <div class="card h-100 text-center">
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 shadow">
 
                 <div class="card-body">
+                    <h5 class="text-success">{{ trek[0] }}</h5>
+                    <h6 class="text-muted">{{ trek[1] }}</h6>
 
-                    <h4 class="fw-bold text-success mb-3">
-                        Verified Treks
-                    </h4>
+                    <p><strong>Difficulty:</strong> {{ trek[2] }}</p>
+                    <p><strong>Best Time:</strong> {{ trek[3] }}</p>
+                    <p><strong>Ideal For:</strong> {{ trek[4] }}</p>
 
-                    <p class="text-muted">
-                        Carefully curated trekking routes to ensure safety, adventure, and unforgettable experiences.
-                    </p>
+                    <p>{{ trek[5] }}</p>
+                </div>
 
+                <div class="card-footer bg-white border-0">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-success w-100">
+                        Register Now
+                    </a>
                 </div>
 
             </div>
-
         </div>
 
-        <div class="col-md-4">
-
-            <div class="card h-100 text-center">
-
-                <div class="card-body">
-
-                    <h4 class="fw-bold text-success mb-3">
-                        Experienced Staff
-                    </h4>
-
-                    <p class="text-muted">
-                        Our trained trekking staff guide every trek with professionalism and a strong focus on safety.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="card h-100 text-center">
-
-                <div class="card-body">
-
-                    <h4 class="fw-bold text-success mb-3">
-                        Easy Booking
-                    </h4>
-
-                    <p class="text-muted">
-                        Reserve your preferred trek online in just a few clicks through a simple booking process.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
+        {% endfor %}
 
     </div>
+</div>
 
 </section>
 
-<!-- CALL TO ACTION -->
+<!-- ABOUT -->
 
-<section class="bg-success text-white py-5">
+<section id="about" class="py-5 bg-light">
+    <div class="container">
 
-<div class="container text-center">
 
-<h2>
+    <h2 class="text-center text-success fw-bold mb-5">
+        About WannaTrek
+    </h2>
 
-Ready for Your Next Adventure?
+    <div class="row">
 
-</h2>
+        <div class="col-md-6">
+            <h4>Your Adventure Starts Here</h4>
+            <p>
+                WannaTrek connects adventure enthusiasts with India's best trekking destinations.
+            </p>
+            <p>
+                From beginner trails to Himalayan expeditions, we ensure safe and memorable experiences.
+            </p>
+        </div>
 
-<p class="lead">
+        <div class="col-md-6">
+            <div class="row g-3">
 
-Join WannaTrek today and start exploring breathtaking destinations.
+                <div class="col-6">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-success">25+</h3>
+                            <p>Trek Routes</p>
+                        </div>
+                    </div>
+                </div>
 
-</p>
+                <div class="col-6">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-success">3500+</h3>
+                            <p>Happy Trekkers</p>
+                        </div>
+                    </div>
+                </div>
 
-<a href="{{ url_for('auth.register') }}"
-class="btn btn-light btn-lg">
+                <div class="col-6">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-success">120+</h3>
+                            <p>Reviews</p>
+                        </div>
+                    </div>
+                </div>
 
-Register Now
+                <div class="col-6">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-success">98%</h3>
+                            <p>Positive Feedback</p>
+                        </div>
+                    </div>
+                </div>
 
-</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</section>
+
+<!-- WHY CHOOSE US -->
+
+<section class="py-5">
+    <div class="container">
+
+
+    <h2 class="text-center text-success fw-bold mb-5">
+        Why Choose WannaTrek?
+    </h2>
+
+    <div class="row g-4">
+
+        {% for item in [
+            "Certified Trek Leaders",
+            "GPS Tracking",
+            "First Aid Support",
+            "Airport Pickup",
+            "Multi-language Guides",
+            "Easy Cancellation"
+        ] %}
+
+        <div class="col-md-4">
+            <div class="card h-100 text-center shadow">
+                <div class="card-body">
+                    <h5>{{ item }}</h5>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+
+</section>
+
+<!-- CONTACT -->
+
+<section id="contact" class="py-5 bg-light">
+    <div class="container text-center">
+
+
+    <h2 class="text-success fw-bold mb-4">
+        Contact Us
+    </h2>
+
+    <p class="lead">We'd love to help you plan your next adventure!</p>
+
+    <p>Email: support@wannatrek.com</p>
+    <p>Phone: +91 98765 43210</p>
+    <p>Location: Hyderabad, Telangana, India</p>
 
 </div>
+
 
 </section>
 
 <!-- FOOTER -->
 
-<footer class="bg-dark text-white text-center py-3">
-
-<p class="mb-0">
-
-© 2026 WannaTrek | Trekking Management System
-
-</p>
-
+<footer class="bg-success text-white text-center py-3">
+    <div class="container">
+        © 2026 WannaTrek. All Rights Reserved.
+        <br>
+        Designed for Adventure Lovers.
+    </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
-
 </html>
