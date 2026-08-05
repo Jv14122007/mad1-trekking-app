@@ -1,176 +1,142 @@
 {% extends "base.html" %}
-
-
-{% block title %}
-Manage Bookings | WannaTrek
-{% endblock %}
-
-
+{% block title %}Manage Bookings | WannaTrek{% endblock %}
 
 {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-success mb-0"><i class="bi bi-ticket-perforated-fill me-2"></i>Booking Management</h2>
+        <p class="text-muted mb-0">All bookings across the system</p>
+    </div>
+</div>
 
+<!-- Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm text-center border-0">
+            <div class="card-body">
+                <h6 class="text-muted">Total Bookings</h6>
+                <h3 class="text-success fw-bold">{{ bookings|length }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm text-center border-0">
+            <div class="card-body">
+                <h6 class="text-muted">Active (Booked)</h6>
+                <h3 class="text-primary fw-bold">{{ bookings | selectattr("status","equalto","Booked") | list | length }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm text-center border-0">
+            <div class="card-body">
+                <h6 class="text-muted">Cancelled / Completed</h6>
+                <h3 class="text-danger fw-bold">{{ bookings | rejectattr("status","equalto","Booked") | list | length }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
 
-<div class="container mt-5">
-
-
-<h2 class="fw-bold text-success mb-4">
-Booking Management
-</h2>
-
-
+<!-- Search -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('dashboard.manage_bookings') }}">
+            <div class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="search" class="form-control"
+                           placeholder="Search by username, email or trek name..."
+                           value="{{ search }}">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button class="btn btn-success">
+                        <i class="bi bi-search me-1"></i>Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 {% if bookings %}
-
-
 <div class="card shadow border-0">
-
-
-<div class="card-body">
-
-
-<div class="table-responsive">
-
-
-<table class="table table-hover table-bordered align-middle text-center">
-
-
-<thead class="table-success">
-
-<tr>
-
-<th>#</th>
-
-<th>User</th>
-
-<th>Email</th>
-
-<th>Trek</th>
-
-<th>Location</th>
-
-<th>Booking Date</th>
-
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-
-
-<tbody>
-
-
-{% for booking in bookings %}
-
-
-<tr>
-
-
-<td>
-{{ loop.index }}
-</td>
-
-
-<td>
-{{ booking.user.username }}
-</td>
-
-
-<td>
-{{ booking.user.email }}
-</td>
-
-
-<td>
-{{ booking.trek.name }}
-</td>
-
-
-<td>
-{{ booking.trek.location }}
-</td>
-
-
-<td>
-
-{{ booking.booking_date.strftime('%d %b %Y') }}
-
-</td>
-
-
-<td>
-
-
-{% if booking.status == "Booked" %}
-
-<span class="badge bg-success">
-Booked
-</span>
-
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="table-success">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Trek</th>
+                        <th>Location</th>
+                        <th>Booking Date</th>
+                        <th>Trek Dates</th>
+                        <th>Booking Status</th>
+                        <th>Trek Status</th>
+                        <th>Guide</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td><strong>{{ booking.user.username }}</strong></td>
+                        <td class="small">{{ booking.user.email }}</td>
+                        <td class="text-start"><strong>{{ booking.trek.name }}</strong></td>
+                        <td>{{ booking.trek.location }}</td>
+                        <td>{{ booking.booking_date.strftime('%d %b %Y') }}</td>
+                        <td class="small">
+                            {{ booking.trek.start_date.strftime('%d %b %Y') }}<br>
+                            <span class="text-muted">to</span><br>
+                            {{ booking.trek.end_date.strftime('%d %b %Y') }}
+                        </td>
+                        <td>
+                            {% if booking.status == "Booked" %}
+                                <span class="badge bg-success">Booked</span>
+                            {% elif booking.status == "Cancelled" %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% elif booking.status == "Completed" %}
+                                <span class="badge bg-primary">Completed</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ booking.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if booking.trek.status == "Open" %}
+                                <span class="badge bg-success">Open</span>
+                            {% elif booking.trek.status == "Closed" %}
+                                <span class="badge bg-danger">Closed</span>
+                            {% elif booking.trek.status == "Completed" %}
+                                <span class="badge bg-primary">Completed</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ booking.trek.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if booking.trek.assigned_staff %}
+                                {{ booking.trek.assigned_staff.username }}
+                            {% else %}
+                                <span class="text-muted fst-italic">Not assigned</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% else %}
-
-<span class="badge bg-secondary">
-{{ booking.status }}
-</span>
-
-
-{% endif %}
-
-
-</td>
-
-
-</tr>
-
-
-{% endfor %}
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-{% else %}
-
-
 <div class="card shadow border-0">
-
-<div class="card-body text-center py-5">
-
-
-<h4 class="text-muted">
-No bookings available
-</h4>
-
-
-<p class="text-secondary">
-Bookings made by users will appear here.
-</p>
-
-
+    <div class="card-body text-center py-5">
+        <i class="bi bi-ticket-perforated fs-1 text-muted mb-3 d-block"></i>
+        <h4 class="text-muted">No Bookings Found</h4>
+        <p class="text-secondary">
+            {% if search %}No bookings match your search "{{ search }}".{% else %}Bookings made by users will appear here.{% endif %}
+        </p>
+    </div>
 </div>
-
-</div>
-
-
 {% endif %}
-
-
-
-</div>
-
 
 {% endblock %}

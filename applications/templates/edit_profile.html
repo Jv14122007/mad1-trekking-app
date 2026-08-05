@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile | WannaTrek{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="card shadow border-0">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i>Edit Profile</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person-fill text-success"></i></span>
+                            <input type="text" name="username" class="form-control"
+                                   value="{{ user.username }}" minlength="3" maxlength="100" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-fill text-success"></i></span>
+                            <input type="email" name="email" class="form-control"
+                                   value="{{ user.email }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Contact Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-telephone-fill text-success"></i></span>
+                            <input type="tel" name="contact" class="form-control"
+                                   value="{{ user.contact or '' }}"
+                                   pattern="[0-9]{10}" maxlength="10"
+                                   placeholder="10-digit mobile number">
+                        </div>
+                        <div class="form-text">Leave blank to remove contact number.</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('dashboard.user_dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Back
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle-fill me-1"></i>Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Info card -->
+        <div class="card shadow-sm border-0 mt-3">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">Account Info</h6>
+                <p class="mb-1 small"><strong>Role:</strong> <span class="badge bg-success">{{ user.role | capitalize }}</span></p>
+                <p class="mb-0 small"><strong>User ID:</strong> {{ user.id }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

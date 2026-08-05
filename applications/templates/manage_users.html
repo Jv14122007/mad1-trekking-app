@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Manage Users | WannaTrek{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-success mb-0"><i class="bi bi-people-fill me-2"></i>Manage Users & Staff</h2>
+        <p class="text-muted mb-0">View, search, approve and manage all registered users.</p>
+    </div>
+</div>
+
+<!-- Search -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="GET">
+            <div class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="search" class="form-control"
+                           placeholder="Search by User ID or Username..."
+                           value="{{ search }}">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-search me-1"></i>Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if users %}
+<div class="card shadow border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-success">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Role</th>
+                        <th>Approval</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td><strong>{{ user.username }}</strong></td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.contact or "—" }}</td>
+                        <td>
+                            {% if user.role == "admin" %}
+                                <span class="badge bg-dark">Admin</span>
+                            {% elif user.role == "staff" %}
+                                <span class="badge bg-primary">Staff</span>
+                            {% else %}
+                                <span class="badge bg-success">User</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.role == "staff" %}
+                                {% if user.approved %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_active %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-danger">Blacklisted</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1 flex-wrap">
+                                {% if user.role == "staff" and not user.approved %}
+                                    <a href="{{ url_for('dashboard.approve_staff', user_id=user.id) }}"
+                                       class="btn btn-success btn-sm">
+                                        <i class="bi bi-check-lg me-1"></i>Approve
+                                    </a>
+                                    <a href="{{ url_for('dashboard.reject_staff', user_id=user.id) }}"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Reject and delete this staff registration?')">
+                                        <i class="bi bi-x-lg me-1"></i>Reject
+                                    </a>
+                                {% endif %}
+                                {% if user.role != "admin" %}
+                                    <a href="{{ url_for('dashboard.toggle_user', user_id=user.id) }}"
+                                       class="btn btn-warning btn-sm text-dark">
+                                        {% if user.is_active %}
+                                            <i class="bi bi-slash-circle me-1"></i>Blacklist
+                                        {% else %}
+                                            <i class="bi bi-check-circle me-1"></i>Activate
+                                        {% endif %}
+                                    </a>
+                                {% else %}
+                                    <span class="badge bg-secondary">Protected</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info text-center border-0">
+    <i class="bi bi-search fs-3 d-block mb-2"></i>
+    <h5 class="mb-1">No users found.</h5>
+    <p class="mb-0">{% if search %}Try a different search term.{% else %}No users registered yet.{% endif %}</p>
+</div>
+{% endif %}
+
+{% endblock %}

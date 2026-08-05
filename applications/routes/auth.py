@@ -4,155 +4,135 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from applications.database import db
 from applications.models import User
 
-
 auth = Blueprint("auth", __name__)
 
-
-# ---------------- REGISTER ----------------
-
+# REGISTER
 @auth.route("/register", methods=["GET", "POST"])
 def register():
-
-    # Already logged in → redirect
     if "user_id" in session:
         return redirect(url_for("home"))
 
     if request.method == "POST":
-
-        username = request.form.get("username", "").strip()
-        email = request.form.get("email", "").strip()
-        password = request.form.get("password", "")
-        contact = request.form.get("contact", "")
+        username         = request.form.get("username", "").strip()
+        email            = request.form.get("email", "").strip().lower()
+        contact          = request.form.get("contact", "").strip()
+        password         = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
-        role = request.form.get("role", "")
+        role             = request.form.get("role", "").strip().lower()
 
-        # -------- VALIDATIONS --------
-
-        # Empty field check
+        # ---- Validations ----
         if not username or not email or not password or not confirm_password or not role:
-            flash("All fields are required.")
+            flash("All fields are required.", "danger")
             return redirect(url_for("auth.register"))
 
-        # Password match check
-        if password != confirm_password:
-            flash("Passwords do not match.")
-            return redirect(url_for("auth.register"))
-
-        # Role validation (NO admin registration)
         if role not in ["user", "staff"]:
-            flash("Invalid role selected.")
+            flash("Invalid role selected.", "danger")
             return redirect(url_for("auth.register"))
 
-        # Username length
         if len(username) < 3:
-            flash("Username must be at least 3 characters.")
+            flash("Username must be at least 3 characters.", "danger")
             return redirect(url_for("auth.register"))
 
-        # Password validation
         if len(password) < 6:
-            flash("Password must be at least 6 characters.")
+            flash("Password must be at least 6 characters.", "danger")
             return redirect(url_for("auth.register"))
 
-        # Duplicate username
+        if password != confirm_password:
+            flash("Passwords do not match.", "danger")
+            return redirect(url_for("auth.register"))
+
+        if contact:
+            if not contact.isdigit() or len(contact) != 10:
+                flash("Enter a valid 10-digit contact number.", "danger")
+                return redirect(url_for("auth.register"))
+
         if User.query.filter_by(username=username).first():
-            flash("Username already exists.")
+            flash("Username already exists.", "danger")
             return redirect(url_for("auth.register"))
 
-        # Duplicate email
         if User.query.filter_by(email=email).first():
-            flash("Email already registered.")
+            flash("Email already registered.", "danger")
             return redirect(url_for("auth.register"))
 
-        # Staff needs approval
-        approved = False if role == "staff" else True
+        # Staff need admin approval; users are auto-approved
+        approved = (role == "user")
 
-        # -------- CREATE USER --------
         try:
             new_user = User(
                 username=username,
                 email=email,
+                contact=contact,
                 password=generate_password_hash(password),
                 role=role,
-                approved=approved
+                approved=approved,
+                is_active=True
             )
-
             db.session.add(new_user)
             db.session.commit()
+
+            if role == "staff":
+                flash("Registration successful! Your account is awaiting admin approval.", "success")
+            else:
+                flash("Registration successful! Please login.", "success")
+
+            return redirect(url_for("auth.login"))
 
         except Exception as e:
             db.session.rollback()
             print("Registration Error:", e)
-            flash("Registration failed. Try again.")
+            flash("Registration failed. Please try again.", "danger")
             return redirect(url_for("auth.register"))
-
-        flash("Registration successful. Please login.")
-        return redirect(url_for("auth.login"))
 
     return render_template("register.html")
 
 
-# ---------------- LOGIN ----------------
-
+# LOGIN
 @auth.route("/login", methods=["GET", "POST"])
 def login():
-
-    # Already logged in → redirect
     if "user_id" in session:
         return redirect(url_for("home"))
 
     if request.method == "POST":
-
-        email = request.form.get("email", "").strip()
+        email    = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
 
-        # Empty validation
         if not email or not password:
-            flash("All fields are required.")
+            flash("All fields are required.", "danger")
             return redirect(url_for("auth.login"))
 
         user = User.query.filter_by(email=email).first()
 
-        if user and check_password_hash(user.password, password):
+        if not user or not check_password_hash(user.password, password):
+            flash("Invalid email or password.", "danger")
+            return redirect(url_for("auth.login"))
 
-            # -------- BLACKLIST CHECK (IMPORTANT FOR MARKS) --------
-            if hasattr(user, "is_active") and not user.is_active:
-                flash("Your account has been deactivated by admin.")
-                return redirect(url_for("auth.login"))
+        if not user.is_active:
+            flash("Your account has been deactivated by the admin.", "danger")
+            return redirect(url_for("auth.login"))
 
-            # -------- STAFF APPROVAL CHECK --------
-            if user.role == "staff" and not user.approved:
-                flash("Your account is waiting for admin approval.")
-                return redirect(url_for("auth.login"))
+        if user.role == "staff" and not user.approved:
+            flash("Your account is awaiting admin approval.", "warning")
+            return redirect(url_for("auth.login"))
 
-            # -------- SESSION --------
-            session["user_id"] = user.id
-            session["role"] = user.role
-            session["username"] = user.username
+        # Store session
+        session["user_id"]  = user.id
+        session["role"]     = user.role
+        session["username"] = user.username
 
-            flash("Login successful.")
+        flash(f"Welcome, {user.username}!", "success")
 
-            # -------- ROLE-BASED REDIRECTION --------
-            if user.role == "admin":
-                return redirect(url_for("dashboard.admin_dashboard"))
-
-            elif user.role == "staff":
-                return redirect(url_for("dashboard.staff_dashboard"))
-
-            else:
-                return redirect(url_for("dashboard.user_dashboard"))
-
-        flash("Invalid email or password.")
-        return redirect(url_for("auth.login"))
+        if user.role == "admin":
+            return redirect(url_for("dashboard.admin_dashboard"))
+        elif user.role == "staff":
+            return redirect(url_for("dashboard.staff_dashboard"))
+        else:
+            return redirect(url_for("dashboard.user_dashboard"))
 
     return render_template("login.html")
 
-
-# ---------------- LOGOUT ----------------
-
+# LOGOUT
 @auth.route("/logout")
 def logout():
-
     session.clear()
-    flash("Logged out successfully.")
-
+    flash("Logged out successfully.", "success")
     return redirect(url_for("home"))

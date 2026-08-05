@@ -1,141 +1,137 @@
 {% extends "base.html" %}
-
-{% block title %}
-Admin Dashboard
-{% endblock %}
+{% block title %}Admin Dashboard | WannaTrek{% endblock %}
 
 {% block content %}
-
-<div class="container mt-5">
-
-
-<!-- Header -->
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-success">
-        Admin Dashboard
-    </h2>
+    <div>
+        <h2 class="fw-bold text-success mb-0"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h2>
+        <p class="text-muted mb-0">System overview and management</p>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+        <div class="card shadow-sm text-center border-0 h-100">
+            <div class="card-body">
+                <i class="bi bi-people-fill fs-2 text-success mb-2 d-block"></i>
+                <h2 class="fw-bold text-success">{{ total_users }}</h2>
+                <p class="text-muted mb-0">Registered Users</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card shadow-sm text-center border-0 h-100">
+            <div class="card-body">
+                <i class="bi bi-person-badge-fill fs-2 text-primary mb-2 d-block"></i>
+                <h2 class="fw-bold text-primary">{{ total_staff }}</h2>
+                <p class="text-muted mb-0">Trek Staff</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card shadow-sm text-center border-0 h-100">
+            <div class="card-body">
+                <i class="bi bi-map-fill fs-2 text-warning mb-2 d-block"></i>
+                <h2 class="fw-bold text-warning">{{ total_treks }}</h2>
+                <p class="text-muted mb-0">Total Treks</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card shadow-sm text-center border-0 h-100">
+            <div class="card-body">
+                <i class="bi bi-ticket-perforated-fill fs-2 text-danger mb-2 d-block"></i>
+                <h2 class="fw-bold text-danger">{{ total_bookings }}</h2>
+                <p class="text-muted mb-0">Total Bookings</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trek status mini-stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+                <h5 class="text-muted">Open Treks</h5>
+                <h3 class="text-success fw-bold">{{ open_treks }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+                <h5 class="text-muted">Pending Treks (no staff)</h5>
+                <h3 class="text-warning fw-bold">{{ pending_treks }}</h3>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Quick Actions -->
-<div class="mb-4">
-    <div class="mb-4">
-
-    <a href="{{ url_for('dashboard.create_trek') }}"
-       class="btn btn-success me-2 mb-2">
-        + Create Trek
-    </a>
-
-    <a href="{{ url_for('dashboard.manage_treks') }}"
-       class="btn btn-primary me-2 mb-2">
-        Manage Treks
-    </a>
-
-    <a href="{{ url_for('dashboard.manage_bookings') }}"
-       class="btn btn-info text-white mb-2">
-        View Bookings
-    </a>
-
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('dashboard.create_trek') }}" class="btn btn-success w-100 py-3">
+            <i class="bi bi-plus-circle-fill me-2"></i>Create New Trek
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('dashboard.manage_users') }}" class="btn btn-primary w-100 py-3">
+            <i class="bi bi-people-fill me-2"></i>Manage Users & Staff
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('dashboard.manage_bookings') }}" class="btn btn-warning w-100 py-3 text-dark">
+            <i class="bi bi-ticket-perforated-fill me-2"></i>View All Bookings
+        </a>
+    </div>
 </div>
-</div>
-<div class="row g-4">
 
-    <div class="col-md-3">
-        <div class="card shadow-sm text-center h-100 border-0">
-            <div class="card-body">
-                <h6 class="text-muted">Total Users</h6>
-                <h2 class="text-success fw-bold">
-                    {{ total_users }}
-                </h2>
-            </div>
+<!-- Pending Staff Approvals -->
+{% if pending_staff %}
+<div class="card shadow border-0 mb-4">
+    <div class="card-header bg-warning text-dark fw-bold">
+        <i class="bi bi-hourglass-split me-2"></i>
+        Pending Staff Approvals ({{ pending_staff|length }})
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th><th>Name</th><th>Email</th><th>Contact</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for staff in pending_staff %}
+                    <tr>
+                        <td>{{ staff.id }}</td>
+                        <td><strong>{{ staff.username }}</strong></td>
+                        <td>{{ staff.email }}</td>
+                        <td>{{ staff.contact or "—" }}</td>
+                        <td>
+                            <a href="{{ url_for('dashboard.approve_staff', user_id=staff.id) }}"
+                               class="btn btn-success btn-sm me-1">
+                                <i class="bi bi-check-lg me-1"></i>Approve
+                            </a>
+                            <a href="{{ url_for('dashboard.reject_staff', user_id=staff.id) }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Reject and delete this staff registration?')">
+                                <i class="bi bi-x-lg me-1"></i>Reject
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm text-center h-100 border-0">
-            <div class="card-body">
-                <h6 class="text-muted">Total Staff</h6>
-                <h2 class="text-success fw-bold">
-                    {{ total_staff }}
-                </h2>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm text-center h-100 border-0">
-            <div class="card-body">
-                <h6 class="text-muted">Total Treks</h6>
-                <h2 class="text-success fw-bold">
-                    {{ total_treks }}
-                </h2>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm text-center h-100 border-0">
-            <div class="card-body">
-                <h6 class="text-muted">Total Bookings</h6>
-                <h2 class="text-success fw-bold">
-                    {{ total_bookings }}
-                </h2>
-            </div>
-        </div>
-    </div>
-
 </div>
-<div class="mt-5">
-
-    <h4 class="fw-semibold mb-3">
-        Pending Staff Approvals
-    </h4>
-
-    {% if pending_staff %}
-
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-
-            <thead class="table-success text-center">
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-            {% for staff in pending_staff %}
-
-                <tr>
-                    <td>{{ staff.username }}</td>
-                    <td>{{ staff.email }}</td>
-
-                    <td class="text-center">
-                        <a href="{{ url_for('dashboard.approve_staff', user_id=staff.id) }}"
-                           class="btn btn-success btn-sm">
-                            Approve
-                        </a>
-                    </td>
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-    </div>
-
-    {% else %}
-
-    <div class="alert alert-success text-center">
-        No pending staff approval requests 
-    </div>
-
-    {% endif %}
-
+{% else %}
+<div class="alert alert-success border-0">
+    <i class="bi bi-check-circle-fill me-2"></i>No pending staff approvals.
 </div>
-
-</div>
+{% endif %}
 
 {% endblock %}

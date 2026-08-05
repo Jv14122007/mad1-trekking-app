@@ -1,53 +1,67 @@
-# 🥾 WannaTrek – Trekking Management Application
+# WannaTrek — Trekking Management Application
 
-WannaTrek is a Flask-based Trekking Management Application developed as part of the **Modern Application Development I (MAD-1)** course.
+A Flask/SQLite web application for managing trekking activities with role-based access for Admin, Trek Staff, and Trekkers (Users).
 
-The application provides a role-based system for managing trekking activities with three different user roles:
-- Admin– Creates and manages treks, approves trek staff, assigns staff, and monitors bookings.
-- Trek Staff– Views assigned treks, manages participants, and updates trek information.
-- Users (Trekkers) – Browse available treks, book treks, and manage their bookings.
-
-## Features
-- User and Trek Staff Registration
-- Secure Login Authentication
-- Admin Approval for Trek Staff
-- Trek Creation, Editing, and Deletion
-- Trek Staff Assignment
-- Trek Booking System
-- Booking Management
-- Role-Based Dashboards
-- SQLite Database using SQLAlchemy ORM
-- Responsive Bootstrap User Interface
-
-## Technologies Used
-- Python
-- Flask
-- SQLite
-- SQLAlchemy
-- HTML
-- CSS
-- Bootstrap 5
-- Jinja2
-
-## Project Structure
-mad1-trekking-app/
-│
-├── app.py
-├── requirements.txt
-├── applications/
-│   ├── database.py
-│   ├── models.py
-│   ├── routes/
-│   ├── templates/
-│   └── static/
-└── README.md
+## Quick Start
+# 1. Install dependencies
+pip install -r requirements.txt
+# 2. Run the application
+python app.py
+Visit: http://127.0.0.1:5000
 
 ## Default Admin Credentials
-Email:
-admin@wannatrek.com
-Password:
-admin123
 
-## Developed For
-Modern Application Development I (MAD-1)
-IIT Madras BS Degree Programme
+| Field    | Value                  |
+|----------|------------------------|
+| Email    | admin@wannatrek.com    |
+| Password | admin123               |
+
+The admin account is created automatically on first run. No manual DB setup required.
+
+## Roles
+
+| Role       | Access                                              |
+|------------|-----------------------------------------------------|
+| Admin      | Full control — treks, users, staff, bookings        |
+| Trek Staff | Self-register (needs admin approval) — manage assigned treks |
+| User       | Self-register — browse, book, and cancel treks      |
+
+
+## Folder Structure
+trekking-app/
+├── app.py                        # App factory + entry point
+├── requirements.txt
+├── instance/
+│   └── trek.db                   # SQLite DB (auto-created)
+└── applications/
+    ├── database.py               # SQLAlchemy instance
+    ├── models.py                 # User, Trek, Booking models
+    ├── routes/
+    │   ├── auth.py               # Register / Login / Logout
+    │   └── dashboard.py          # All role-based routes
+    ├── static/
+    │   ├── css/style.css
+    │   └── images/Hill.jpeg
+    └── templates/
+        ├── base.html
+        ├── index.html
+        ├── login.html / register.html
+        ├── admin_dashboard.html
+        ├── manage_treks.html / create_trek.html / edit_trek.html
+        ├── assign_staff.html
+        ├── manage_users.html
+        ├── manage_bookings.html
+        ├── staff_dashboard.html
+        ├── participants.html
+        ├── user_dashboard.html
+        ├── user_treks.html
+        ├── my_bookings.html
+        ├── edit_profile.html
+        ├── 403.html / 404.html
+
+
+## Tech Stack
+- **Backend:** Flask 3.0, Flask-SQLAlchemy 3.1
+- **Database:** SQLite (programmatically created via `db.create_all()`)
+- **Frontend:** Jinja2, Bootstrap 5.3, Bootstrap Icons
+- **Auth:** Session-based with Werkzeug password hashing

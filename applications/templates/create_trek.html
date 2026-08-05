@@ -1,147 +1,82 @@
 {% extends "base.html" %}
-
-{% block title %}
-Create Trek
-{% endblock %}
+{% block title %}Create Trek | WannaTrek{% endblock %}
 
 {% block content %}
-
-<div class="container mt-5">
-
 <div class="row justify-content-center">
-
     <div class="col-lg-7">
-
         <div class="card shadow border-0">
-
-            <!-- Header -->
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">
-                    Create New Trek
-                </h4>
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i>Create New Trek</h4>
             </div>
-
-            <!-- Body -->
-            <div class="card-body">
-
+            <div class="card-body p-4">
                 <form method="POST">
 
-                    <!-- Trek Name -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">
-                            Trek Name
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            class="form-control"
-                            placeholder="Enter trek name"
-                            required>
+                        <label class="form-label fw-semibold">Trek Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control"
+                               placeholder="e.g. Kedarnath Trek" maxlength="100" required>
                     </div>
 
-                    <!-- Location -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">
-                            Location
-                        </label>
-                        <input
-                            type="text"
-                            name="location"
-                            class="form-control"
-                            placeholder="Enter trek location"
-                            required>
+                        <label class="form-label fw-semibold">Location <span class="text-danger">*</span></label>
+                        <input type="text" name="location" class="form-control"
+                               placeholder="e.g. Uttarakhand" required>
                     </div>
 
-                    <!-- Difficulty -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">
-                            Difficulty
-                        </label>
-                        <select
-                            name="difficulty"
-                            class="form-select"
-                            required>
-                            <option value="" disabled selected>
-                                -- Select Difficulty --
-                            </option>
+                        <label class="form-label fw-semibold">Difficulty <span class="text-danger">*</span></label>
+                        <select name="difficulty" class="form-select" required>
+                            <option value="" selected disabled>-- Select Difficulty --</option>
                             <option value="Easy">Easy</option>
                             <option value="Moderate">Moderate</option>
                             <option value="Hard">Hard</option>
                         </select>
                     </div>
 
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Start Date <span class="text-danger">*</span></label>
+                            <input type="date" name="start_date" class="form-control"
+                                   min="{{ today }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">End Date <span class="text-danger">*</span></label>
+                            <input type="date" name="end_date" class="form-control"
+                                   min="{{ today }}" required>
+                        </div>
+                    </div>
+                    <div class="form-text mb-3 text-muted">
+                        <i class="bi bi-info-circle me-1"></i>Duration is calculated automatically from the dates.
+                    </div>
 
-                    <!-- Dates -->
-                    <div class="row">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Available Slots <span class="text-danger">*</span></label>
+                        <input type="number" name="slots" class="form-control"
+                               min="1" placeholder="e.g. 20" required>
+                    </div>
 
-    <div class="col-md-6 mb-3">
-        <label class="form-label">
-            Start Date
-        </label>
-
-        <input
-            type="date"
-            name="start_date"
-            class="form-control"
-            required>
-    </div>
-
-
-    <div class="col-md-6 mb-3">
-        <label class="form-label">
-            End Date
-        </label>
-
-        <input
-            type="date"
-            name="end_date"
-            class="form-control"
-            required>
-    </div>
-
-</div>
-
-                    <!-- Slots -->
                     <div class="mb-4">
-                        <label class="form-label fw-semibold">
-                            Available Slots
-                        </label>
-                        <input
-                            type="number"
-                            name="slots"
-                            min="1"
-                            class="form-control"
-                            placeholder="Enter available slots"
-                            required>
+                        <label class="form-label fw-semibold">Description <span class="text-muted small">(optional)</span></label>
+                        <textarea name="description" class="form-control" rows="3"
+                                  placeholder="Brief description of the trek..."></textarea>
                     </div>
 
-                    <!-- Buttons -->
+                    <div class="alert alert-info small mb-4">
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        New treks start as <strong>Pending</strong>. Assign a staff member to automatically open the trek for bookings.
+                    </div>
+
                     <div class="d-flex justify-content-between">
-
-                        <a href="{{ url_for('dashboard.manage_treks') }}"
-                           class="btn btn-outline-secondary">
-                            Cancel
+                        <a href="{{ url_for('dashboard.manage_treks') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Cancel
                         </a>
-
-                        <button
-                            type="submit"
-                            class="btn btn-success">
-                            Create Trek
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle-fill me-1"></i>Create Trek
                         </button>
-
                     </div>
-
                 </form>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
-
-
-</div>
-
 {% endblock %}

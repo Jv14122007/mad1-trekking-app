@@ -1,392 +1,87 @@
-/* ==========================================
-            GLOBAL STYLES
-========================================== */
+/*GLOBAL*/
+html { scroll-behavior: smooth; }
 
-html{
-    scroll-behavior:smooth;
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7f4;
+    color: #333;
 }
 
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f5f7f4;
-    color:#333;
-    margin:0;
-    padding:0;
-}
+section { scroll-margin-top: 80px; }
+a { text-decoration: none; }
 
-section{
-    scroll-margin-top:80px;
-}
-
-a{
-    text-decoration:none;
-}
-
-/* ==========================================
-                NAVBAR
-========================================== */
-
-.custom-navbar{
-    background:#2E7D32;
-    box-shadow:0 3px 12px rgba(0,0,0,.15);
-    padding:10px 0;
-}
-
-.custom-navbar .navbar-brand{
-    color:#fff !important;
-    font-size:30px;
-    font-weight:700;
-    letter-spacing:1px;
-}
-
-.custom-navbar .navbar-brand:hover{
-    color:#E8F5E9 !important;
-}
-
-.custom-navbar .nav-link{
-    color:#E8F5E9 !important;
-    font-weight:600;
-    margin-left:15px;
-    transition:.3s;
-}
-
-.custom-navbar .nav-link:hover,
-.custom-navbar .nav-link.active{
-    color:#fff !important;
-}
-
-.custom-navbar .navbar-toggler{
-    border-color:#fff;
-}
-
-/* ==========================================
-                HERO
-========================================== */
-
-.hero{
-
-    min-height:100vh;
-
+/*HERO*/
+.hero {
+    min-height: 100vh;
     background-image:
-        linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
+        linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
         url("../images/Hill.jpeg");
-
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    text-align:center;
-
-    color:white;
-
-    padding:20px;
-
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-.hero-content{
+.hero-content { max-width: 800px; }
 
-    max-width:800px;
-
+.hero-content h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    text-shadow: 3px 3px 10px rgba(0,0,0,.6);
+    margin-bottom: 20px;
 }
 
-.hero-content h1{
-
-    font-size:4rem;
-
-    font-weight:700;
-
-    text-shadow:3px 3px 10px rgba(0,0,0,.6);
-
-    margin-bottom:20px;
-
+.hero-content p {
+    font-size: 1.35rem;
+    line-height: 1.7;
+    text-shadow: 2px 2px 8px rgba(0,0,0,.6);
+    margin-bottom: 35px;
 }
 
-.hero-content p{
-
-    font-size:22px;
-
-    line-height:1.7;
-
-    text-shadow:2px 2px 8px rgba(0,0,0,.6);
-
-    margin-bottom:35px;
-
+/*CARDS*/
+.card {
+    border-radius: 12px;
+    transition: transform .25s, box-shadow .25s;
 }
 
-/* ==========================================
-                BUTTONS
-========================================== */
-
-.btn{
-
-    transition:.3s;
-
-    border-radius:8px;
-
-    font-weight:600;
-
+.trek-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.14) !important;
 }
 
-.btn:hover{
+/*TABLES*/
+.table { background: white; }
+.table th { vertical-align: middle; }
+.table td { vertical-align: middle; }
 
-    transform:translateY(-3px);
-
-}
-
-.btn-login{
-
-    color:#fff;
-
-    border:1px solid #fff;
-
-    background:transparent;
-
-}
-
-.btn-login:hover{
-
-    background:#fff;
-
-    color:#2E7D32;
-
-}
-
-.btn-register{
-
-    background:#fff;
-
-    color:#2E7D32;
-
-    border:1px solid #fff;
-
-}
-
-.btn-register:hover{
-
-    background:#f1f1f1;
-
-    color:#1B5E20;
-
-}
-
-/* ==========================================
-                CARDS
-========================================== */
-
-.card{
-
-    border:none;
-
-    border-radius:15px;
-
-    overflow:hidden;
-
-    transition:.3s;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-
-}
-
-.card:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:0 15px 30px rgba(0,0,0,.15);
-
-}
-
-.card-header{
-
-    font-weight:600;
-
-}
-
-/* ==========================================
-                TABLES
-========================================== */
-
-.table{
-
-    background:white;
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-}
-
-.table th{
-
-    background:#198754;
-
-    color:white;
-
-    vertical-align:middle;
-
-}
-
-.table td{
-
-    vertical-align:middle;
-
-}
-
-/* ==========================================
-                FORMS
-========================================== */
-
-form{
-
-    padding:10px;
-
-}
-
-.form-control,
-.form-select{
-
-    border-radius:8px;
-
-}
-
+/*FORMS*/
 .form-control:focus,
-.form-select:focus{
-
-    border-color:#198754;
-
-    box-shadow:0 0 0 .2rem rgba(25,135,84,.2);
-
+.form-select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 .2rem rgba(25,135,84,.2);
 }
 
-/* ==========================================
-                BADGES
-========================================== */
+/* BUTTONS */
+.btn { border-radius: 8px; font-weight: 600; transition: .25s; }
+.btn:hover { transform: translateY(-2px); }
 
-.badge{
+/* BADGES */
+.badge { font-size: .8rem; padding: 5px 9px; border-radius: 6px; }
 
-    font-size:.85rem;
-
-    padding:7px 10px;
-
+/*RESPONSIVE*/
+@media (max-width: 992px) {
+    .hero-content h1 { font-size: 3rem; }
 }
 
-/* ==========================================
-                ALERTS
-========================================== */
-
-.alert{
-
-    border:none;
-
-    border-radius:10px;
-
+@media (max-width: 768px) {
+    .hero { min-height: 75vh; }
+    .hero-content h1 { font-size: 2.3rem; }
+    .hero-content p { font-size: 1.1rem; }
+    .table { font-size: 13px; }
 }
 
-/* ==========================================
-                FOOTER
-========================================== */
-
-footer{
-
-    background:#198754;
-
-    color:white;
-
-    margin-top:60px;
-
-    padding:18px;
-
-    font-size:15px;
-
-}
-
-/* ==========================================
-            SECTION TITLES
-========================================== */
-
-h2{
-
-    font-weight:700;
-
-}
-
-.text-success{
-
-    color:#198754 !important;
-
-}
-
-/* ==========================================
-                RESPONSIVE
-========================================== */
-
-@media(max-width:992px){
-
-    .hero-content h1{
-
-        font-size:3rem;
-
-    }
-
-}
-
-@media(max-width:768px){
-
-    .hero{
-
-        min-height:75vh;
-
-    }
-
-    .hero-content h1{
-
-        font-size:2.3rem;
-
-    }
-
-    .hero-content p{
-
-        font-size:18px;
-
-    }
-
-    .navbar-brand{
-
-        font-size:24px !important;
-
-    }
-
-    .table{
-
-        font-size:14px;
-
-    }
-
-}
-
-@media(max-width:576px){
-
-    .hero-content h1{
-
-        font-size:2rem;
-
-    }
-
-    .hero-content p{
-
-        font-size:16px;
-
-    }
-
-    .btn{
-
-        width:100%;
-
-        margin-bottom:10px;
-
-    }
-
+@media (max-width: 576px) {
+    .hero-content h1 { font-size: 1.9rem; }
 }

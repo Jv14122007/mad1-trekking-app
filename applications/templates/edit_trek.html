@@ -1,182 +1,86 @@
 {% extends "base.html" %}
-
-{% block title %}
-Edit Trek
-{% endblock %}
-
+{% block title %}Edit Trek | WannaTrek{% endblock %}
 
 {% block content %}
-
-<div class="container mt-5">
-
 <div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow border-0">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0"><i class="bi bi-pencil-fill me-2"></i>Edit Trek &mdash; {{ trek.name }}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
 
-<div class="col-md-8">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Trek Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control"
+                               value="{{ trek.name }}" maxlength="100" required>
+                    </div>
 
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Location <span class="text-danger">*</span></label>
+                        <input type="text" name="location" class="form-control"
+                               value="{{ trek.location }}" required>
+                    </div>
 
-<div class="card shadow border-0">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Difficulty <span class="text-danger">*</span></label>
+                        <select name="difficulty" class="form-select" required>
+                            <option value="Easy"     {% if trek.difficulty == "Easy"     %}selected{% endif %}>Easy</option>
+                            <option value="Moderate" {% if trek.difficulty == "Moderate" %}selected{% endif %}>Moderate</option>
+                            <option value="Hard"     {% if trek.difficulty == "Hard"     %}selected{% endif %}>Hard</option>
+                        </select>
+                    </div>
 
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Start Date <span class="text-danger">*</span></label>
+                            <input type="date" name="start_date" class="form-control"
+                                   value="{{ trek.start_date.strftime('%Y-%m-%d') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">End Date <span class="text-danger">*</span></label>
+                            <input type="date" name="end_date" class="form-control"
+                                   value="{{ trek.end_date.strftime('%Y-%m-%d') }}" required>
+                        </div>
+                    </div>
+                    <div class="form-text mb-3 text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Current duration: <strong>{{ trek.duration }} day(s)</strong>. Duration updates automatically from dates.
+                    </div>
 
-<div class="card-header bg-success text-white">
-<h4 class="mb-0">
-Edit Trek
-</h4>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Available Slots <span class="text-danger">*</span></label>
+                        <input type="number" name="slots" class="form-control"
+                               min="0" value="{{ trek.slots }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select" required>
+                            <option value="Pending"   {% if trek.status == "Pending"   %}selected{% endif %}>Pending</option>
+                            <option value="Open"      {% if trek.status == "Open"      %}selected{% endif %}>Open</option>
+                            <option value="Closed"    {% if trek.status == "Closed"    %}selected{% endif %}>Closed</option>
+                            <option value="Completed" {% if trek.status == "Completed" %}selected{% endif %}>Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Description <span class="text-muted small">(optional)</span></label>
+                        <textarea name="description" class="form-control" rows="3">{{ trek.description or '' }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('dashboard.manage_treks') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle-fill me-1"></i>Update Trek
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-<div class="card-body">
-
-
-<form method="POST">
-
-
-<div class="mb-3">
-
-<label class="form-label fw-semibold">
-Trek Name
-</label>
-
-<input
-type="text"
-name="name"
-class="form-control"
-value="{{ trek.name }}"
-required>
-
-</div>
-
-
-
-<div class="mb-3">
-
-<label class="form-label fw-semibold">
-Location
-</label>
-
-<input
-type="text"
-name="location"
-class="form-control"
-value="{{ trek.location }}"
-required>
-
-</div>
-
-
-
-<div class="mb-3">
-
-<label class="form-label fw-semibold">
-Difficulty
-</label>
-
-
-<select
-name="difficulty"
-class="form-select"
-required>
-
-
-<option value="Easy"
-{% if trek.difficulty=="Easy" %}selected{% endif %}>
-Easy
-</option>
-
-
-<option value="Moderate"
-{% if trek.difficulty=="Moderate" %}selected{% endif %}>
-Moderate
-</option>
-
-
-<option value="Hard"
-{% if trek.difficulty=="Hard" %}selected{% endif %}>
-Hard
-</option>
-
-
-</select>
-
-</div>
-
-
-
-<div class="mb-3">
-
-<label class="form-label fw-semibold">
-Trek Date
-</label>
-
-
-<input
-type="date"
-name="date"
-class="form-control"
-value="{{ trek.date }}"
-required>
-
-</div>
-
-
-
-
-<div class="mb-4">
-
-<label class="form-label fw-semibold">
-Available Slots
-</label>
-
-
-<input
-type="number"
-name="slots"
-min="1"
-class="form-control"
-value="{{ trek.slots }}"
-required>
-
-</div>
-
-
-
-
-<div class="d-flex justify-content-between">
-
-
-<a href="{{ url_for('dashboard.manage_treks') }}"
-class="btn btn-outline-secondary">
-
-Cancel
-
-</a>
-
-
-<button
-type="submit"
-class="btn btn-success">
-
-Update Trek
-
-</button>
-
-
-</div>
-
-
-</form>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-</div>
-
-</div>
-
-
 {% endblock %}
